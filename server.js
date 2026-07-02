@@ -5,9 +5,9 @@ app.use(express.static('public'));
 
 const NOTION_KEY = process.env.NOTION_KEY || '';
 const CLAUDE_KEY = process.env.CLAUDE_KEY || '';
-const INSP_DB = 'ecbcd501-bfd4-4de3-b0bd-57b7dc7a9be9';
-const HOOK_DB = 'b079b0e7-95a8-42cb-bc7d-c1c9ab8be560';
-const BENCH_DB = 'e8de72dd-8999-47ab-aa84-6678e3637ea3';
+const INSP_DB = '3f2b821c14444d079502177652141530';
+const HOOK_DB = 'f9f9b501cb1342e5a079b0a0c43ae46d';
+const BENCH_DB = '2fae21035ba34b82ba7bc274087738ee';
 
 async function notionQuery(dbId, filter, sorts) {
   if (!NOTION_KEY) return { results: [] };
