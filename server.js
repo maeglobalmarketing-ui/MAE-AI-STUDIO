@@ -82,6 +82,8 @@ app.get('/api/hooks', async function(req, res) {
     return {
       hook: getTitle(p) || getProp(p,'钩子内容'),
       type: getProp(p,'钩子类型'),
+      account: getProp(p,'适用账号'),
+      identity: getProp(p,'适用身份'),
       note: getProp(p,'例句') || getProp(p,'适用身份')
     };
   }));
@@ -93,7 +95,8 @@ app.get('/api/benchmarks', async function(req, res) {
     return {
       name: getTitle(p) || getProp(p,'账号名'),
       lang: getProp(p,'语言'),
-      note: getProp(p,'对标原因') || getProp(p,'内容类型')
+      note: getProp(p,'对标原因') || getProp(p,'内容类型'),
+      url: getProp(p,'链接')
     };
   }));
 });
