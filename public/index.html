@@ -219,6 +219,9 @@
   .prop-status.ps-done{background:#E4F5EC;color:#1E8A5A}
   .prop-edit{display:inline-block;margin-top:14px;font-size:13px;font-weight:600;
     color:var(--orchid)}
+  .prop-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+    margin-top:14px;padding-top:12px;border-top:1px solid var(--line);
+    font-size:12px;color:var(--muted)}
   /* 快捷指令安装横幅 */
   .sc-banner{background:linear-gradient(135deg,var(--lilac),#F6F1FB);
     border:1px solid var(--line);border-radius:16px;padding:20px 22px;
@@ -372,6 +375,12 @@
   .funnel-note b{color:var(--orchid);font-weight:600}
   @media(max-width:600px){
     .tier.t2,.tier.t3{max-width:100%}
+    nav.tabs button{padding:10px 14px;font-size:14px}
+    .chip{padding:9px 15px;font-size:13.5px}
+    .frow .fk{min-width:100%;margin-bottom:2px}
+    .notion-add-bar,.send-row,.ns-btns{gap:10px}
+    .notion-add,.sc-install{width:100%;justify-content:center}
+    .sc-main{flex-direction:column;align-items:stretch}
   }
 
   footer{padding:28px 0;border-top:1px solid var(--line);text-align:center;
@@ -813,6 +822,8 @@ async function loadProposals(){
     const line=esc(d.line||'');
     const ptype=esc(d.ptype||'');
     const owner=esc(d.owner||'');
+    const proposer=esc(d.proposer||'');
+    const created=esc(d.created||'');
     const audience=esc(d.audience||'');
     const keymsg=esc(d.keymsg||'');
     const url=d.url||'';
@@ -824,10 +835,14 @@ async function loadProposals(){
       '<h3 style="margin-top:10px">'+name+'</h3>'+
       '<div class="hook-tags" style="margin-top:8px">'+
         (ptype?'<span class="tag">'+ptype+'</span>':'')+
-        (owner?'<span class="tag">👤 '+owner+'</span>':'')+
+        (owner?'<span class="tag">👤 负责 '+owner+'</span>':'')+
       '</div>'+
       (keymsg?'<p style="margin-top:12px"><b>Key Message：</b>'+keymsg+'</p>':'')+
       (audience?'<p style="margin-top:8px;color:var(--muted)"><b>目标人群：</b>'+audience+'</p>':'')+
+      '<div class="prop-foot">'+
+        (proposer?'<span>提案人：'+proposer+'</span>':'')+
+        (created?'<span>'+created+'</span>':'')+
+      '</div>'+
       (url?'<span class="prop-edit">在 Notion 打开修改 →</span>':'');
     return url
       ? '<a class="card prop-card" href="'+esc(url)+'" target="_blank">'+inner+'</a>'
