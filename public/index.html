@@ -174,6 +174,15 @@
     border:1px solid var(--line);font-size:14.5px;line-height:1.7;
     white-space:pre-wrap;min-height:60px;color:var(--ink)}
   .out:empty::before{content:'结果会出现在这里 ✦';color:var(--muted);font-style:italic}
+  .send-row{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}
+  .send-btn{font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;
+    padding:10px 18px;border-radius:11px;border:1px solid var(--line);
+    background:var(--white);color:var(--ink);transition:.18s}
+  .send-btn:hover{border-color:var(--orchid);color:var(--orchid);
+    transform:translateY(-1px)}
+  .send-btn.primary{background:var(--orchid);color:#fff;border-color:var(--orchid)}
+  .send-btn.primary:hover{color:#fff;background:var(--orchid-deep)}
+  .send-note{font-size:12px;color:var(--muted);line-height:1.55;margin-top:12px}
 
   /* ---- states ---- */
   .loading,.empty{text-align:center;padding:60px 20px;color:var(--muted)}
@@ -364,13 +373,23 @@
       </div>
       <div class="panel">
         <h3 id="toolTitle">钩子生成</h3>
-        <p class="hint" id="toolHint">输入主题或场景，生成 5 个高共鸣钩子。</p>
+        <p class="hint" id="toolHint">输入主题或场景，生成一段内置 MAE 品牌规则的专业 prompt，送到你惯用的 AI 里生成。</p>
         <label class="fld">你的输入</label>
         <textarea id="aiInput" placeholder="例如：一位妈妈重新开始学画画的故事…"></textarea>
-        <button class="run" id="runBtn" onclick="runAI()">
-          <span>生成</span><span>✦</span>
+        <button class="run" id="runBtn" onclick="buildPrompt()">
+          <span>生成 Prompt</span><span>✦</span>
         </button>
-        <div class="out" id="aiOut"></div>
+        <div id="promptWrap" style="display:none">
+          <label class="fld" style="margin-top:22px">已生成 Prompt · 内置 MAE 品牌语境</label>
+          <div class="out" id="aiOut" style="min-height:120px"></div>
+          <div class="send-row">
+            <button class="send-btn primary" onclick="copyPrompt()" id="copyBtn">📋 复制</button>
+            <button class="send-btn" onclick="sendTo('chatgpt')">在 ChatGPT 打开</button>
+            <button class="send-btn" onclick="sendTo('claude')">在 Claude 打开</button>
+            <button class="send-btn" onclick="sendTo('gemini')">在 Gemini 打开</button>
+          </div>
+          <p class="send-note">复制永远可用。跳转按钮会打开对应 AI；ChatGPT 通常能自动带入，Claude / Gemini 若没自动填，粘贴即可（已帮你复制）。</p>
+        </div>
       </div>
     </div>
   </section>
@@ -596,13 +615,27 @@ async function loadBench(){
   }).join('')+'</div>';
 }
 
-// ---------- AI 工作台 ----------
+// ---------- AI 工作台（Prompt 生成器 · 送去各家 AI） ----------
 const toolMeta={
-  hook:{title:'钩子生成',hint:'输入主题或场景，生成 5 个高共鸣钩子。',ph:'例如：一位妈妈重新开始学画画的故事…'},
-  script:{title:'脚本搭建',hint:'输入钩子或核心想法，生成完整短视频脚本。',ph:'例如：钩子 = "35 岁，我才第一次为自己活"…'},
-  series:{title:'系列扩展',hint:'输入一个成功选题，扩展成一整季内容。',ph:'例如："她的第一次" 系列…'}
+  hook:{title:'钩子生成',hint:'输入主题或场景，生成内置 MAE 规则的钩子 prompt，送到你惯用的 AI。',ph:'例如：一位妈妈重新开始学画画的故事…'},
+  script:{title:'脚本搭建',hint:'输入钩子或核心想法，生成完整短视频脚本 prompt。',ph:'例如：钩子 = "35 岁，我才第一次为自己活"…'},
+  series:{title:'系列扩展',hint:'输入一个成功选题，扩展成一整季内容的 prompt。',ph:'例如："她的第一次" 系列…'}
+};
+// MAE 品牌语境（所有 prompt 内置）
+const MAE_CONTEXT='【MAE 品牌语境】\n'+
+'你是 MAE Global 的内容创作助手。MAE 帮助 25–45 岁女性找回内在力量、看见自己的价值、活出自信与美丽。这句使命绝不直接引用，而要通过具体的女性故事来体现。\n'+
+'判断标准：一位具体的她看完，会不会觉得「被看见了」或「被启发了」。\n'+
+'两个账号：CEO IP @kateysy 讲 Kate 的真实故事、不读广告、可脆弱真实；品牌号 @maeglobalofficial 用多元女性场景，每条必须有 Key Message、视觉质量达标。\n'+
+'创作原则：事件优先（事件 > 情绪 > 文案）。五种事件类型：反差、结果、过程、冲突、身份。\n'+
+'五种需求原型：重启者（想重新开始）、撑场者（努力被低估、渴望被看见）、掌舵者（做决定、想真实非完美）、和解者（关系中成长）、觉醒者（刚意识到值得为自己活）。\n'+
+'请用中文回复。\n\n';
+const toolTask={
+  hook:'【任务】为以下主题生成 5 个高共鸣的开场钩子（前 3 秒抓住观众）。每个钩子一行，标注钩子类型（悬念/反差/数字/提问/痛点/金句等）。\n\n【主题】',
+  script:'【任务】基于以下钩子或核心想法，写一条完整短视频脚本：包含钩子、3-4 个场景节拍、以及情绪落点。标注适合哪个账号（CEO IP / 品牌号）。\n\n【想法】',
+  series:'【任务】基于以下成功选题，扩展成一整季（8 集）系列。每集给标题 + 一句话看点，并标注对应的需求原型。\n\n【选题】'
 };
 let curTool='hook';
+let builtPrompt='';
 document.querySelectorAll('.tool').forEach(t=>t.onclick=()=>{
   document.querySelectorAll('.tool').forEach(x=>x.classList.remove('on'));
   t.classList.add('on');curTool=t.dataset.tool;
@@ -610,22 +643,48 @@ document.querySelectorAll('.tool').forEach(t=>t.onclick=()=>{
   document.getElementById('toolTitle').textContent=m.title;
   document.getElementById('toolHint').textContent=m.hint;
   document.getElementById('aiInput').placeholder=m.ph;
+  document.getElementById('promptWrap').style.display='none';
   document.getElementById('aiOut').textContent='';
+  builtPrompt='';
 });
 
-async function runAI(){
+function buildPrompt(){
   const input=document.getElementById('aiInput').value.trim();
   const out=document.getElementById('aiOut');
-  const btn=document.getElementById('runBtn');
-  if(!input){out.textContent='请先输入内容 ✦';return;}
-  btn.disabled=true;out.textContent='思考中…';
-  try{
-    const r=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({tool:curTool,input})});
-    const d=await r.json();
-    out.textContent=d.result||d.error||'没有返回结果，请稍后再试。';
-  }catch(e){out.textContent='生成失败：'+e.message;}
-  btn.disabled=false;
+  const wrap=document.getElementById('promptWrap');
+  if(!input){wrap.style.display='block';out.textContent='请先在上方输入主题或想法 ✦';return;}
+  builtPrompt=MAE_CONTEXT+toolTask[curTool]+input;
+  out.textContent=builtPrompt;
+  wrap.style.display='block';
+  wrap.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function copyPrompt(){
+  if(!builtPrompt)return;
+  const btn=document.getElementById('copyBtn');
+  navigator.clipboard.writeText(builtPrompt).then(function(){
+    btn.textContent='✓ 已复制';
+    setTimeout(function(){btn.textContent='📋 复制';},1600);
+  }).catch(function(){
+    // fallback
+    const ta=document.getElementById('aiOut');
+    const r=document.createRange();r.selectNodeContents(ta);
+    const s=window.getSelection();s.removeAllRanges();s.addRange(r);
+    try{document.execCommand('copy');btn.textContent='✓ 已复制';
+      setTimeout(function(){btn.textContent='📋 复制';},1600);}catch(e){}
+  });
+}
+
+function sendTo(ai){
+  if(!builtPrompt){return;}
+  // 先复制，保证兜底
+  navigator.clipboard && navigator.clipboard.writeText(builtPrompt).catch(function(){});
+  var url;
+  var q=encodeURIComponent(builtPrompt);
+  if(ai==='chatgpt') url='https://chatgpt.com/?q='+q;       // ChatGPT 支持 URL 带入
+  else if(ai==='claude') url='https://claude.ai/new';        // Claude 跳转新对话，粘贴
+  else if(ai==='gemini') url='https://gemini.google.com/app';// Gemini 跳转，粘贴
+  window.open(url,'_blank');
 }
 
 // ---------- 品牌使命：需求原型 × 女性角色 ----------
