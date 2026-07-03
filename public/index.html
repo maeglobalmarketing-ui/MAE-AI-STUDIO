@@ -214,6 +214,7 @@
   .prop-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .prop-status{font-size:12px;font-weight:600;padding:4px 12px;border-radius:100px}
   .prop-status.ps-todo{background:#EEE;color:#777}
+  .prop-status.ps-ok{background:#FCF3D9;color:#B7851A}
   .prop-status.ps-doing{background:#E3EDFB;color:#2B6CB0}
   .prop-status.ps-done{background:#E4F5EC;color:#1E8A5A}
   .prop-edit{display:inline-block;margin-top:14px;font-size:13px;font-weight:600;
@@ -457,7 +458,7 @@
   <!-- 提案库 -->
   <section class="view" id="v-proposals">
     <div class="notion-add-bar">
-      <a class="notion-add" href="https://www.notion.so/9c9faa2a3515414d80d92af4fa5a17ba" target="_blank">+ 在 Notion 添加提案</a>
+      <a class="notion-add" href="https://www.notion.so/6daf5f25048b41c2be54297d75b7c584" target="_blank">+ 在 Notion 添加提案</a>
       <span class="notion-add-note">点任意提案卡可跳去 Notion 修改；添加后刷新即可看到</span>
     </div>
     <div id="propBody"><div class="loading"><div class="spinner"></div>正在读取系列提案库…</div></div>
@@ -513,7 +514,7 @@
             <div class="ns-title">✦ 生成好内容后，下一步</div>
             <div class="ns-sub">把满意的内容变成可执行的提案，或存进钩子库沉淀下来</div>
             <div class="ns-btns">
-              <a class="ns-btn" href="https://www.notion.so/9c9faa2a3515414d80d92af4fa5a17ba" target="_blank">📋 存进提案库</a>
+              <a class="ns-btn" href="https://www.notion.so/6daf5f25048b41c2be54297d75b7c584" target="_blank">📋 存进提案库</a>
               <a class="ns-btn" href="https://www.notion.so/f9f9b501cb1342e5a079b0a0c43ae46d" target="_blank">✦ 加进钩子库</a>
             </div>
           </div>
@@ -796,8 +797,9 @@ async function loadBench(){
 // ---------- 提案库（只读展示 + 点击去 Notion 修改） ----------
 function propStatusClass(s){
   if(!s) return 'ps-todo';
-  if(s.indexOf('完成')>=0) return 'ps-done';
+  if(s.indexOf('完结')>=0) return 'ps-done';
   if(s.indexOf('进行')>=0) return 'ps-doing';
+  if(s.indexOf('批准')>=0) return 'ps-ok';
   return 'ps-todo';
 }
 async function loadProposals(){
@@ -807,29 +809,25 @@ async function loadProposals(){
   if(!data.length){body.innerHTML=emptyState('还没有提案。点上方「+ 在 Notion 添加提案」创建第一个系列。');return;}
   body.innerHTML='<div class="grid">'+data.map(d=>{
     const name=esc(d.name||'未命名系列');
-    const status=esc(d.status||'未开始');
-    const account=esc(d.account||'');
-    const ctype=esc(d.ctype||'');
-    const event=esc(d.event||'');
-    const suspense=esc(d.suspense||'');
-    const outline=esc(d.outline||'');
-    const eps=d.episodes?esc(String(d.episodes))+' 集':'';
-    const pace=esc(d.pace||'');
+    const status=esc(d.status||'1提案中');
+    const line=esc(d.line||'');
+    const ptype=esc(d.ptype||'');
+    const owner=esc(d.owner||'');
+    const audience=esc(d.audience||'');
+    const keymsg=esc(d.keymsg||'');
     const url=d.url||'';
     const inner=
       '<div class="prop-top">'+
         '<span class="prop-status '+propStatusClass(d.status)+'">'+status+'</span>'+
-        (account?'<span class="tag tag-acct">'+account+'</span>':'')+
+        (line?'<span class="tag tag-acct">'+line+'</span>':'')+
       '</div>'+
       '<h3 style="margin-top:10px">'+name+'</h3>'+
       '<div class="hook-tags" style="margin-top:8px">'+
-        (ctype?'<span class="tag">'+ctype+'</span>':'')+
-        (event?'<span class="tag">'+event+'</span>':'')+
-        (eps?'<span class="tag">'+eps+'</span>':'')+
-        (pace?'<span class="tag">'+pace+'</span>':'')+
+        (ptype?'<span class="tag">'+ptype+'</span>':'')+
+        (owner?'<span class="tag">👤 '+owner+'</span>':'')+
       '</div>'+
-      (suspense?'<p style="margin-top:12px"><b>核心悬念：</b>'+suspense+'</p>':'')+
-      (outline?'<p style="margin-top:8px;color:var(--muted)"><b>前三集：</b>'+outline+'</p>':'')+
+      (keymsg?'<p style="margin-top:12px"><b>Key Message：</b>'+keymsg+'</p>':'')+
+      (audience?'<p style="margin-top:8px;color:var(--muted)"><b>目标人群：</b>'+audience+'</p>':'')+
       (url?'<span class="prop-edit">在 Notion 打开修改 →</span>':'');
     return url
       ? '<a class="card prop-card" href="'+esc(url)+'" target="_blank">'+inner+'</a>'
