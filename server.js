@@ -67,13 +67,21 @@ app.get('/api/inspirations', async function(req, res) {
   var rows = await notionQuery('INSP', INSP_DB);
   res.json(rows.map(function(p) {
     return {
-      title:    getTitle(p) || getProp(p,'内容亮点'),
-      desc:     getProp(p,'AI拆解摘要') || getProp(p,'MAE版本概念'),
-      type:     getProp(p,'内容格式') || getProp(p,'事件类型'),
-      account:  getProp(p,'账号方向'),
-      identity: getProp(p,'目标身份'),
-      source:   getProp(p,'来源'),
-      url:      getProp(p,'链接')
+      title:      getTitle(p) || getProp(p,'内容亮点'),
+      desc:       getProp(p,'AI拆解摘要') || getProp(p,'MAE版本概念'),
+      type:       getProp(p,'内容格式') || getProp(p,'事件类型'),
+      account:    getProp(p,'账号方向'),
+      identity:   getProp(p,'目标身份'),
+      source:     getProp(p,'来源'),
+      url:        getProp(p,'链接'),
+      // AI 分析字段（后台分析写回）
+      eventType:  getProp(p,'事件类型'),
+      format:     getProp(p,'内容格式'),
+      elements:   getProp(p,'爆款元素'),
+      aiSummary:  getProp(p,'AI拆解摘要'),
+      maeConcept: getProp(p,'MAE版本概念'),
+      compliance: getProp(p,'合规检查'),
+      series:     getProp(p,'内容判断')
     };
   }));
 });
