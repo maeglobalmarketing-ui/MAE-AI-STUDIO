@@ -329,6 +329,7 @@
   <!-- 灵感库 -->
   <section class="view" id="v-insp">
     <div class="strip" id="inspStats"></div>
+    <div id="inspFilters"></div>
     <div id="inspBody"><div class="loading"><div class="spinner"></div>正在读取灵感收藏库…</div></div>
   </section>
 
@@ -435,33 +436,76 @@ function emptyState(msg){
   return '<div class="empty"><h3>还没有内容 ✦</h3><p>'+msg+'</p></div>';
 }
 
-// ---------- 灵感库 ----------
+// ---------- 灵感库（三维筛选） ----------
+let allInsp=[];
+const inspFilters={account:'全部',identity:'全部',source:'全部'};
 async function loadInsp(){
-  const data=await getJSON('/api/inspirations');
-  const body=document.getElementById('inspBody');
+  allInsp=await getJSON('/api/inspirations');
+  if(allInsp.length){setConn(true);}
+  renderInspStats();
+  renderInsp();
+}
+function renderInspStats(){
   const stats=document.getElementById('inspStats');
-  if(data.length){setConn(true);}
-  const total=data.length;
-  const fmt={};data.forEach(d=>{const f=d.type||d.format||'其他';fmt[f]=(fmt[f]||0)+1;});
+  const total=allInsp.length;
+  const fmt={};allInsp.forEach(d=>{const f=d.type||d.format||'其他';fmt[f]=(fmt[f]||0)+1;});
   const topFmt=Object.keys(fmt).sort((a,b)=>fmt[b]-fmt[a])[0]||'—';
   stats.innerHTML=[
     ['灵感总数',total],
     ['内容格式',Object.keys(fmt).length],
     ['热门格式',topFmt],
-    ['本周新增',data.filter(d=>d.recent).length||'—']
+    ['目标身份',new Set(allInsp.map(d=>d.identity).filter(Boolean)).size||'—']
   ].map(s=>'<div class="stat"><div class="n">'+s[1]+'</div><div class="l">'+s[0]+'</div></div>').join('');
-  if(!total){body.innerHTML=emptyState('保存一条灵感到 Notion，它会出现在这里。');return;}
-  body.innerHTML='<div class="grid">'+data.map(d=>{
+}
+function inspUniq(key){
+  const s=new Set();
+  allInsp.forEach(d=>{const v=(d[key]||'').trim();if(v)s.add(v);});
+  return Array.from(s);
+}
+function inspChip(dim,val){
+  const on=inspFilters[dim]===val;
+  return '<button class="chip'+(on?' on':'')+'" onclick="setInspFilter(\''+dim+'\',\''+val+'\')">'+esc(val)+'</button>';
+}
+window.setInspFilter=function(dim,val){inspFilters[dim]=val;renderInsp();};
+function renderInsp(){
+  const fbar=document.getElementById('inspFilters');
+  const body=document.getElementById('inspBody');
+  if(!allInsp.length){fbar.innerHTML='';body.innerHTML=emptyState('保存一条灵感到 Notion，它会出现在这里。');return;}
+  const accounts=inspUniq('account'),ids=inspUniq('identity'),sources=inspUniq('source');
+  let bar='<div class="filters">';
+  if(accounts.length){bar+='<div class="frow"><span class="fk">账号</span>'+
+    ['全部'].concat(accounts).map(v=>inspChip('account',v)).join('')+'</div>';}
+  if(ids.length){bar+='<div class="frow"><span class="fk">身份</span>'+
+    ['全部'].concat(ids).map(v=>inspChip('identity',v)).join('')+'</div>';}
+  if(sources.length){bar+='<div class="frow"><span class="fk">来源</span>'+
+    ['全部'].concat(sources).map(v=>inspChip('source',v)).join('')+'</div>';}
+  bar+='</div>';
+  fbar.innerHTML=bar;
+  const shown=allInsp.filter(d=>
+    (inspFilters.account==='全部'||(d.account||'')===inspFilters.account) &&
+    (inspFilters.identity==='全部'||(d.identity||'')===inspFilters.identity) &&
+    (inspFilters.source==='全部'||(d.source||'')===inspFilters.source));
+  if(!shown.length){
+    body.innerHTML='<div class="fcount">显示 0 / '+allInsp.length+' 条</div>'+
+      '<div class="empty"><p>没有符合筛选条件的灵感，换个组合试试。</p></div>';
+    return;
+  }
+  body.innerHTML='<div class="fcount">显示 '+shown.length+' / '+allInsp.length+' 条</div>'+
+    '<div class="grid">'+shown.map(d=>{
     const title=esc(d.title||d.name||'未命名灵感');
     const desc=esc(d.desc||d.description||d.note||'');
     const tag=esc(d.type||d.format||'灵感');
+    const acct=esc(d.account||'');
+    const src=esc(d.source||'');
     const url=d.url||d.link||'';
     const embed=igEmbed(url);
-    return '<div class="card"><span class="tag">'+tag+'</span>'+
+    return '<div class="card"><div class="hook-tags"><span class="tag">'+tag+'</span>'+
+      (acct?'<span class="tag tag-acct">'+acct+'</span>':'')+
+      (src?'<span class="tag">'+src+'</span>':'')+'</div>'+
       '<h3>'+title+'</h3>'+
       embed+
       (desc?'<p>'+desc+'</p>':'')+
-      '<div class="meta">'+(d.account?'<span>'+esc(d.account)+'</span>':'')+
+      '<div class="meta">'+(d.identity?'<span>'+esc(d.identity)+'</span>':'')+
       (url?'<a class="open" href="'+esc(url)+'" target="_blank">看原片 ▶</a>':'')+
       '</div></div>';
   }).join('')+'</div>';
