@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<script async src="https://www.instagram.com/embed.js"></script>
 <style>
   :root{
     --lavender:#C3B5EB;
@@ -168,6 +169,104 @@
     animation:spin .8s linear infinite;margin:0 auto 18px}
   @keyframes spin{to{transform:rotate(360deg)}}
 
+  /* ---- mission page ---- */
+  .mission-hero{background:linear-gradient(135deg,var(--lilac),#fff);
+    border:1px solid var(--line);border-radius:24px;padding:48px 44px;
+    margin-bottom:34px;position:relative;overflow:hidden}
+  .mission-hero::after{content:'✦';position:absolute;right:34px;top:28px;
+    font-size:60px;color:var(--lavender);opacity:.4}
+  .mission-line{font-family:'Fraunces',serif;font-weight:400;
+    font-size:clamp(26px,3.4vw,40px);line-height:1.32;letter-spacing:-.01em;
+    margin-top:14px;max-width:20ch}
+  .mission-line em{font-style:italic;color:var(--orchid)}
+  .mission-note{margin-top:24px;font-size:15px;color:var(--muted);
+    max-width:56ch;line-height:1.7}
+  .mission-sub{font-family:'Fraunces',serif;font-size:20px;font-weight:500;
+    margin-bottom:10px;color:var(--ink)}
+  .mission-framenote{font-size:13.5px;color:var(--muted);line-height:1.65;
+    max-width:60ch;margin-bottom:22px}
+  .mission-framenote strong{color:var(--orchid);font-weight:600}
+  .identity-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:820px){.identity-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.identity-grid{grid-template-columns:1fr}}
+  .identity{background:var(--white);border:1px solid var(--line);
+    border-radius:18px;padding:24px;transition:.25s;position:relative;overflow:hidden}
+  .identity:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);
+    border-color:var(--lavender)}
+  .identity .ring{width:44px;height:44px;border-radius:13px;
+    background:linear-gradient(135deg,var(--lavender),var(--lilac));
+    display:grid;place-items:center;font-size:20px;margin-bottom:15px}
+  .identity h4{font-family:'Fraunces',serif;font-weight:500;font-size:18px;
+    margin-bottom:8px}
+  .identity p{font-size:13.5px;color:var(--muted);line-height:1.6}
+  .role-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+  .role{font-size:11.5px;font-weight:500;color:var(--orchid-deep);
+    background:var(--lilac);padding:3px 10px;border-radius:100px}
+  .legacy{margin-top:12px;padding-top:11px;border-top:1px solid var(--line);
+    font-size:11.5px;color:var(--muted)}
+
+  /* ---- account framework ---- */
+  .account-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:760px){.account-grid{grid-template-columns:1fr}}
+  .acct{border-radius:20px;padding:30px;border:1px solid var(--line);
+    position:relative;overflow:hidden}
+  .acct.ceo{background:linear-gradient(160deg,#fff,var(--lilac))}
+  .acct.brand{background:linear-gradient(160deg,#fff,#F6F1FB)}
+  .acct-head{display:flex;align-items:center;gap:13px;margin-bottom:6px}
+  .acct-badge{width:46px;height:46px;border-radius:13px;flex-shrink:0;
+    display:grid;place-items:center;font-size:22px;color:#fff}
+  .acct.ceo .acct-badge{background:linear-gradient(135deg,var(--orchid),var(--orchid-deep))}
+  .acct.brand .acct-badge{background:linear-gradient(135deg,var(--lavender),var(--orchid))}
+  .acct-head h4{font-family:'Fraunces',serif;font-weight:500;font-size:21px}
+  .acct-head .handle{font-size:12px;color:var(--muted);font-weight:500}
+  .acct-tagline{font-family:'Fraunces',serif;font-style:italic;font-size:17px;
+    line-height:1.45;margin:16px 0 8px;padding-bottom:20px;
+    border-bottom:1px solid rgba(115,80,185,.14)}
+  .acct.ceo .acct-tagline{color:var(--orchid-deep)}
+  .acct.brand .acct-tagline{color:var(--orchid)}
+  .acct-row{padding:18px 0 0}
+  .acct-row .lbl{display:inline-block;font-size:12px;font-weight:600;
+    letter-spacing:.02em;color:var(--orchid-deep);background:rgba(255,255,255,.7);
+    padding:4px 12px;border-radius:100px;margin-bottom:9px}
+  .acct.brand .acct-row .lbl{color:var(--orchid)}
+  .acct-row .val{font-size:15px;line-height:1.75;color:var(--ink);
+    padding-left:2px}
+  .acct-row .val .no{color:#C0392B;font-weight:600}
+  .acct-row .val .yes{color:#1E8A5A;font-weight:600}
+  .bridge{grid-column:1/-1;background:var(--white);border:1px dashed var(--lavender);
+    border-radius:16px;padding:18px 22px;text-align:center;font-size:14px;
+    color:var(--ink);line-height:1.6}
+  .bridge b{color:var(--orchid);font-weight:600}
+
+  /* ---- content funnel ---- */
+  .funnel{display:flex;flex-direction:column;align-items:center;gap:10px}
+  .tier{width:100%;border-radius:16px;padding:22px 26px;color:#fff;
+    position:relative;overflow:hidden}
+  .tier.t1{background:linear-gradient(135deg,var(--lavender),#A892DC);
+    max-width:100%}
+  .tier.t2{background:linear-gradient(135deg,#9A7BD4,var(--orchid));
+    max-width:82%}
+  .tier.t3{background:linear-gradient(135deg,var(--orchid),var(--orchid-deep));
+    max-width:64%}
+  .tier-top{display:flex;align-items:center;gap:12px;margin-bottom:14px;
+    flex-wrap:wrap}
+  .tier-stage{font-size:11px;font-weight:700;letter-spacing:.14em;
+    background:rgba(255,255,255,.22);padding:4px 11px;border-radius:100px}
+  .tier-name{font-family:'Fraunces',serif;font-weight:500;font-size:20px}
+  .tier-goal{font-size:14.5px;line-height:1.55;opacity:.96;margin-bottom:16px}
+  .tier-meta{display:flex;flex-wrap:wrap;gap:8px 22px}
+  .tier-meta .block{min-width:0}
+  .tier-meta .k{font-size:10.5px;font-weight:600;letter-spacing:.06em;
+    text-transform:uppercase;opacity:.7;margin-bottom:3px}
+  .tier-meta .v{font-size:13px;line-height:1.5}
+  .funnel-note{text-align:center;font-size:13.5px;color:var(--muted);
+    margin-top:18px;max-width:60ch;margin-left:auto;margin-right:auto;
+    line-height:1.6}
+  .funnel-note b{color:var(--orchid);font-weight:600}
+  @media(max-width:600px){
+    .tier.t2,.tier.t3{max-width:100%}
+  }
+
   footer{padding:28px 0;border-top:1px solid var(--line);text-align:center;
     font-size:12px;color:var(--muted)}
   footer em{font-family:'Fraunces',serif;font-style:italic;color:var(--orchid)}
@@ -204,14 +303,15 @@
   </div>
 
   <nav class="tabs">
-    <button class="on" data-v="insp">灵感库</button>
+    <button class="on" data-v="mission">品牌使命</button>
+    <button data-v="insp">灵感库</button>
     <button data-v="hooks">钩子库</button>
     <button data-v="bench">对标账号</button>
     <button data-v="ai">AI 工作台</button>
   </nav>
 
   <!-- 灵感库 -->
-  <section class="view on" id="v-insp">
+  <section class="view" id="v-insp">
     <div class="strip" id="inspStats"></div>
     <div id="inspBody"><div class="loading"><div class="spinner"></div>正在读取灵感收藏库…</div></div>
   </section>
@@ -257,6 +357,27 @@
       </div>
     </div>
   </section>
+
+  <!-- 品牌使命 -->
+  <section class="view on" id="v-mission">
+    <div class="mission-hero">
+      <div class="eyebrow">Our Mission</div>
+      <p class="mission-line">帮助更多女性通过 MAE<br><em>找回内在力量，看见自己的价值，</em><br>并活出自信与美丽。</p>
+      <p class="mission-note">这句使命从不被直接说出，而是活在每一个具体的女性故事里。每一条内容的判断标准只有一个：一位具体的她看完，会不会觉得「被看见了」或「被启发了」。</p>
+    </div>
+
+    <div class="mission-sub">五种需求原型 · 她此刻想解决什么</div>
+    <p class="mission-framenote">按「她想成为谁」的需求状态分层，比按社会角色分类更贴近真实动机。每种原型下标注对应的女性角色与内容标签，方便团队对上现有内容。<strong>这是内容策略框架，非受众数据</strong>——真实受众画像将随 Instagram 数据接入后上线。</p>
+    <div class="identity-grid" id="identityGrid"></div>
+
+    <div class="mission-sub" style="margin-top:44px">两个账号 · 如何各自帮助她</div>
+    <p class="mission-framenote">CEO IP 用「她自己」建立信任与向往——让观众觉得「她做得到，我也想试」。品牌号用「很多个她」提供路径与归属——让观众在故事里看见自己，并接住她们。一个拉人进来，一个接住。</p>
+    <div class="account-grid" id="accountGrid"></div>
+
+    <div class="mission-sub" style="margin-top:44px">内容漏斗 · 一条信任的路径</div>
+    <p class="mission-framenote">MAE 的内容漏斗<strong>只聚焦信任，不是卖货</strong>。它不催单，而是让一位陌生的她，一步步从「看见」走到「相信」，再到「行动」。别只堆顶部流量内容——中间的「被看见 / 被启发」，才是把观众变成信徒的地方。</p>
+    <div class="funnel" id="funnel"></div>
+  </section>
 </main>
 
 <footer class="wrap">
@@ -270,6 +391,9 @@ tabBtns.forEach(b=>b.onclick=()=>{
   tabBtns.forEach(x=>x.classList.remove('on'));b.classList.add('on');
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
   document.getElementById('v-'+b.dataset.v).classList.add('on');
+  if(b.dataset.v==='insp' && window.instgrm && window.instgrm.Embeds){
+    window.instgrm.Embeds.process();
+  }
 });
 
 // ---------- safe fetch ----------
@@ -316,12 +440,27 @@ async function loadInsp(){
     const desc=esc(d.desc||d.description||d.note||'');
     const tag=esc(d.type||d.format||'灵感');
     const url=d.url||d.link||'';
+    const embed=igEmbed(url);
     return '<div class="card"><span class="tag">'+tag+'</span>'+
-      '<h3>'+title+'</h3>'+(desc?'<p>'+desc+'</p>':'')+
+      '<h3>'+title+'</h3>'+
+      embed+
+      (desc?'<p>'+desc+'</p>':'')+
       '<div class="meta">'+(d.account?'<span>'+esc(d.account)+'</span>':'')+
-      (url?'<a class="open" href="'+esc(url)+'" target="_blank">查看 →</a>':'')+
+      (url?'<a class="open" href="'+esc(url)+'" target="_blank">看原片 ▶</a>':'')+
       '</div></div>';
   }).join('')+'</div>';
+  if(window.instgrm && window.instgrm.Embeds){window.instgrm.Embeds.process();}
+}
+
+// build an Instagram embed block for a reel/post url; empty string if not IG
+function igEmbed(url){
+  if(!url) return '';
+  var m=url.match(/instagram\.com\/(reel|p|tv)\/([A-Za-z0-9_-]+)/);
+  if(!m) return '';
+  var clean='https://www.instagram.com/'+m[1]+'/'+m[2]+'/';
+  return '<blockquote class="instagram-media" data-instgrm-permalink="'+clean+'" '+
+    'data-instgrm-version="14" style="margin:14px 0 4px;min-width:0;width:100%">'+
+    '</blockquote>';
 }
 
 // ---------- 钩子库 ----------
@@ -391,8 +530,110 @@ async function runAI(){
   btn.disabled=false;
 }
 
+// ---------- 品牌使命：需求原型 × 女性角色 ----------
+const archetypes=[
+  {icon:'❋',name:'重启者',need:'处在人生转折点，想重新开始。',
+   roles:['转型中的女性','重返职场的妈妈'],legacy:'转型中的女性'},
+  {icon:'✎',name:'撑场者',need:'每天扛着工作与家庭，努力常被低估，渴望被看见。',
+   roles:['职场女性','家庭主妇'],legacy:'职场女性 · 家庭主妇'},
+  {icon:'♛',name:'掌舵者',need:'做决定、担责任，想展现真实而非完美。',
+   roles:['老板','创业者','女性管理者'],legacy:'老板/创业者'},
+  {icon:'♡',name:'和解者',need:'在关系里成长，寻找边界与自我认同。',
+   roles:['女儿','妻子'],legacy:'女儿 · 老婆'},
+  {icon:'☾',name:'觉醒者',need:'刚意识到「我值得为自己活」，自我价值正在萌芽。',
+   roles:['任何刚开始自我觉醒的她'],legacy:'最贴 MAE 使命核心'}
+];
+function renderIdentities(){
+  var g=document.getElementById('identityGrid');
+  if(!g) return;
+  g.innerHTML=archetypes.map(function(a){
+    var roleTags=a.roles.map(function(r){return '<span class="role">'+r+'</span>';}).join('');
+    return '<div class="identity"><div class="ring">'+a.icon+'</div>'+
+      '<h4>'+a.name+'</h4>'+
+      '<p>'+a.need+'</p>'+
+      '<div class="role-row">'+roleTags+'</div>'+
+      '<div class="legacy">对应内容标签：'+a.legacy+'</div>'+
+      '</div>';
+  }).join('');
+}
+
+// ---------- 两个账号框架 ----------
+const accounts=[
+  {cls:'ceo',icon:'✦',name:'CEO IP',handle:'@kateysy · Kate 个人',
+   tagline:'用「她自己」证明——你也可以。',
+   rows:[
+     ['分工定位','建立信任与向往。Kate 作为真实女性创业者，她的日常、决定、脆弱与成长，本身就是「找回内在力量」的活证据。观众信任的是一个具体的人。'],
+     ['选题方向','创始人真实过程、做决定的瞬间、幕后与脆弱、个人成长与转折。真实日常 > 精修宣传。'],
+     ['口吻表达','第一人称、真诚、允许不完美。像朋友说话，不像品牌广播。原生画面可接受。'],
+     ['合规红线','<span class="yes">可</span>：高表达自由、真实出镜、情绪脆弱。<span class="no">不可</span>：照读广告文案、硬推产品。'],
+     ['转接方式','用信任把观众带到品牌世界——「我一路走来靠的这些，MAE 想帮更多她做到」，自然过渡，不硬销。']
+   ]},
+  {cls:'brand',icon:'❋',name:'MAE 品牌号',handle:'@maeglobalofficial · 品牌流量',
+   tagline:'用「很多个她」照见——这就是我。',
+   rows:[
+     ['分工定位','提供路径与归属。不靠单一个人，通过各种女性的具体场景，让观众在别人的故事里看见自己，并被接住——你不孤单。'],
+     ['选题方向','多元女性身份场景、痛点带产品、员工 POV、反差与共鸣。每条锚定一种需求原型。'],
+     ['口吻表达','温暖、有画面质感、清晰。可以是多个声音的合集，但情绪落点统一。'],
+     ['合规红线','<span class="yes">可</span>：产品与使命落地、场景化表达。<span class="no">必须</span>：每条有明确 Key Message，视觉质量达标。'],
+     ['转接方式','把「被看见」的情绪收束到 MAE 能提供什么——从共鸣到行动，给她一个具体的下一步。']
+   ]}
+];
+function renderAccounts(){
+  var g=document.getElementById('accountGrid');
+  if(!g) return;
+  var cards=accounts.map(function(a){
+    var rows=a.rows.map(function(r){
+      return '<div class="acct-row"><span class="lbl">'+r[0]+'</span>'+
+        '<div class="val">'+r[1]+'</div></div>';
+    }).join('');
+    return '<div class="acct '+a.cls+'">'+
+      '<div class="acct-head"><div class="acct-badge">'+a.icon+'</div>'+
+      '<div><h4>'+a.name+'</h4><div class="handle">'+a.handle+'</div></div></div>'+
+      '<div class="acct-tagline">'+a.tagline+'</div>'+rows+'</div>';
+  }).join('');
+  var bridge='<div class="bridge"><b>CEO IP 拉人进来，品牌号接住她们。</b>'+
+    ' 前者建立「想成为」，后者给出「如何做到 + 你不孤单」。两个号方向一致，分工不同。</div>';
+  g.innerHTML=cards+bridge;
+}
+
+// ---------- 内容漏斗（信任漏斗） ----------
+const funnelTiers=[
+  {cls:'t1',stage:'TOFU',name:'被吸引',
+   goal:'让还不认识 MAE 的她停下来、看进去。广触达，先被内容抓住。',
+   account:'CEO IP 真实故事 + 品牌号高流量反差 / POV（两号都上）',
+   persona:'觉醒者 · 撑场者',
+   metric:'播放量 · 触达 · 完播率'},
+  {cls:'t2',stage:'MOFU',name:'被看见 · 被启发',
+   goal:'让她在故事里认出自己「这就是我」，并开始认同 MAE 的价值观。这一层最关键、最容易被忽略。',
+   account:'需求原型场景内容为主 + CEO IP 成长 / 价值观加持',
+   persona:'重启者 · 和解者 · 掌舵者',
+   metric:'收藏 · 评论 · 分享 · 关注 · 主页点击'},
+  {cls:'t3',stage:'BOFU',name:'被转化',
+   goal:'给她一个具体的下一步。从共鸣走到行动。',
+   account:'品牌号带 Key Message + 产品场景（承接转化）',
+   persona:'所有已被养熟、准备行动的她',
+   metric:'私信 · 点链接 · 了解产品 · 转化'}
+];
+function renderFunnel(){
+  var f=document.getElementById('funnel');
+  if(!f) return;
+  f.innerHTML=funnelTiers.map(function(t){
+    return '<div class="tier '+t.cls+'">'+
+      '<div class="tier-top"><span class="tier-stage">'+t.stage+'</span>'+
+      '<span class="tier-name">'+t.name+'</span></div>'+
+      '<div class="tier-goal">'+t.goal+'</div>'+
+      '<div class="tier-meta">'+
+        '<div class="block"><div class="k">主力账号</div><div class="v">'+t.account+'</div></div>'+
+        '<div class="block"><div class="k">对应原型</div><div class="v">'+t.persona+'</div></div>'+
+        '<div class="block"><div class="k">核心指标</div><div class="v">'+t.metric+'</div></div>'+
+      '</div></div>';
+  }).join('')+
+  '<div class="funnel-note"><b>这是信任漏斗，不是卖货漏斗。</b>'+
+  ' TOFU 让她看见，MOFU 让她相信，BOFU 让她行动——内容的使命是建立信任，不是催单。</div>';
+}
+
 // ---------- boot ----------
-loadInsp();loadHooks();loadBench();
+loadInsp();loadHooks();loadBench();renderIdentities();renderAccounts();renderFunnel();
 </script>
 </body>
 </html>
