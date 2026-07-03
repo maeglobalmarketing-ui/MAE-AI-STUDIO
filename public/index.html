@@ -1,215 +1,398 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<title>MAE Content Studio</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAE AI Studio · 创意指挥室</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#fafaf8;color:#1a1a1a}
-.app{max-width:800px;margin:0 auto;padding:12px}
-.header{padding:12px 0;border-bottom:1px solid #e5e5e0;margin-bottom:12px}
-.header h1{font-size:18px;font-weight:500}
-.header p{font-size:12px;color:#888}
-.nav{display:flex;gap:2px;overflow-x:auto;border-bottom:1px solid #e5e5e0;margin-bottom:12px;-webkit-overflow-scrolling:touch}
-.nav-btn{padding:10px 14px;font-size:13px;cursor:pointer;border:none;background:none;color:#888;border-bottom:2px solid transparent;white-space:nowrap;display:flex;align-items:center;gap:4px}
-.nav-btn.on{color:#185FA5;border-bottom-color:#185FA5}
-.section{display:none}.section.on{display:block}
-.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.filters select{padding:6px 10px;border:1px solid #e5e5e0;border-radius:6px;font-size:12px;background:#fff}
-.card{background:#fff;border:1px solid #e5e5e0;border-radius:10px;padding:14px;margin-bottom:10px}
-.card-title{font-size:14px;font-weight:500;margin-bottom:6px}
-.card-meta{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}
-.tag{font-size:10px;padding:2px 7px;border-radius:10px;display:inline-block}
-.card-text{font-size:12px;color:#666;line-height:1.5}
-.card-link{font-size:11px;color:#185FA5;text-decoration:none;word-break:break-all}
-.hook-item{border-left:3px solid;padding:6px 0 6px 10px;margin-bottom:10px;border-radius:0}
-.hook-type{font-size:10px;padding:2px 7px;border-radius:10px;display:inline-block;margin-bottom:3px}
-.hook-text{font-size:13px;line-height:1.5}
-.hook-note{font-size:11px;color:#888;margin-top:2px}
-.bench{display:flex;gap:10px;align-items:flex-start}
-.bench-icon{width:36px;height:36px;border-radius:50%;background:#E6F1FB;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#185FA5;font-size:14px;font-weight:500}
-.bench-info{flex:1}
-.bench-name{font-size:14px;font-weight:500}
-.bench-reason{font-size:12px;color:#666;margin-top:2px;line-height:1.4}
-.bench-tags{margin-top:4px}
-input,select,textarea{padding:8px 10px;border:1px solid #e5e5e0;border-radius:8px;font-size:13px;background:#fff;width:100%}
-select{width:auto}
-.row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
-.btn{padding:8px 16px;border:1.5px solid #185FA5;background:#E6F1FB;color:#185FA5;border-radius:8px;font-size:13px;cursor:pointer;font-weight:500}
-.btn:disabled{opacity:.4}
-.ai-out{margin-top:10px}
-.ai-card{background:#fff;border:1px solid #e5e5e0;border-radius:10px;padding:14px;margin-top:8px}
-.ep{border-bottom:1px solid #f0f0ec;padding:8px 0}
-.ep:last-child{border:none}
-.ep-num{font-size:10px;color:#185FA5;font-weight:600}
-.ep-title{font-size:13px;font-weight:500;margin:1px 0}
-.ep-detail{font-size:11px;color:#666;line-height:1.4}
-.time-row{display:flex;gap:8px;padding:6px 0;border-bottom:1px solid #f0f0ec}
-.time-label{font-size:11px;color:#185FA5;min-width:38px;font-weight:600}
-.time-text{font-size:12px;line-height:1.4}
-.time-sub{font-size:11px;color:#888}
-.loading{font-size:13px;color:#888;padding:16px 0}
-.error{color:#A32D2D;font-size:13px}
-.empty{text-align:center;padding:40px 0;color:#888;font-size:13px}
-.count{font-size:11px;color:#888;margin-bottom:8px}
-.caption-box{background:#fafaf8;border-radius:6px;padding:10px;margin-top:8px}
-.caption-text{font-size:12px;line-height:1.5;white-space:pre-wrap}
-@media(max-width:600px){.app{padding:8px}.card{padding:10px}.nav-btn{padding:8px 10px;font-size:12px}}
+  :root{
+    --lavender:#C3B5EB;
+    --orchid:#7350B9;
+    --lilac:#F0E6F5;
+    --orchid-deep:#4A2F80;
+    --ink:#2A1F3D;
+    --paper:#FBF9FD;
+    --white:#FFFFFF;
+    --line:#E4D8ED;
+    --muted:#8A7BA3;
+    --shadow:0 4px 24px rgba(115,80,185,.10);
+    --shadow-lg:0 12px 40px rgba(115,80,185,.16);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter','Noto Sans SC',sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--lavender);color:var(--orchid-deep)}
+
+  /* ---- ambient backdrop ---- */
+  .aura{position:fixed;inset:0;z-index:-1;overflow:hidden}
+  .aura span{position:absolute;border-radius:50%;filter:blur(80px);opacity:.5}
+  .aura .a1{width:480px;height:480px;background:var(--lavender);top:-140px;right:-120px}
+  .aura .a2{width:360px;height:360px;background:var(--lilac);bottom:-100px;left:-80px}
+  .aura .a3{width:300px;height:300px;background:#E8DEF7;top:40%;left:55%}
+
+  /* ---- shell ---- */
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+  /* ---- header ---- */
+  header{padding:28px 0 20px;position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(14px);background:rgba(251,249,253,.72);
+    border-bottom:1px solid var(--line)}
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:20px}
+  .brand{display:flex;align-items:center;gap:13px}
+  .glyph{width:42px;height:42px;border-radius:13px;
+    background:linear-gradient(135deg,var(--orchid),var(--lavender));
+    display:grid;place-items:center;box-shadow:var(--shadow);flex-shrink:0}
+  .glyph svg{width:22px;height:22px}
+  .brand h1{font-family:'Fraunces',serif;font-weight:500;font-size:20px;
+    letter-spacing:-.01em;line-height:1.1}
+  .brand p{font-size:11px;color:var(--muted);letter-spacing:.14em;
+    text-transform:uppercase;font-weight:500}
+  .status{display:flex;align-items:center;gap:7px;font-size:12px;
+    color:var(--muted);padding:6px 13px;border-radius:100px;
+    background:var(--white);border:1px solid var(--line)}
+  .dot{width:7px;height:7px;border-radius:50%;background:#B8B0C8}
+  .dot.live{background:#5BC98A;box-shadow:0 0 0 3px rgba(91,201,138,.2)}
+
+  /* ---- hero ---- */
+  .hero{padding:52px 0 30px}
+  .eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--orchid);font-weight:600;margin-bottom:16px}
+  .hero h2{font-family:'Fraunces',serif;font-weight:400;
+    font-size:clamp(34px,5vw,54px);line-height:1.08;letter-spacing:-.02em;
+    max-width:16ch}
+  .hero h2 em{font-style:italic;color:var(--orchid)}
+  .hero .sub{margin-top:20px;font-size:16px;color:var(--muted);max-width:52ch}
+
+  /* ---- tabs ---- */
+  nav.tabs{display:flex;gap:6px;margin:34px 0 10px;flex-wrap:wrap;
+    padding:5px;background:var(--white);border:1px solid var(--line);
+    border-radius:16px;width:fit-content;box-shadow:var(--shadow)}
+  nav.tabs button{font-family:inherit;font-size:14px;font-weight:500;
+    color:var(--muted);background:none;border:none;cursor:pointer;
+    padding:9px 18px;border-radius:11px;transition:.22s;white-space:nowrap}
+  nav.tabs button:hover{color:var(--orchid)}
+  nav.tabs button.on{background:var(--orchid);color:#fff;
+    box-shadow:0 2px 10px rgba(115,80,185,.28)}
+
+  section.view{display:none;padding:22px 0 80px;animation:rise .4s ease}
+  section.view.on{display:block}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  /* ---- stat strip ---- */
+  .strip{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:30px}
+  .stat{background:var(--white);border:1px solid var(--line);border-radius:16px;
+    padding:18px 20px;position:relative;overflow:hidden}
+  .stat::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+    background:linear-gradient(var(--orchid),var(--lavender))}
+  .stat .n{font-family:'Fraunces',serif;font-size:30px;font-weight:500;
+    color:var(--orchid-deep);line-height:1}
+  .stat .l{font-size:12px;color:var(--muted);margin-top:6px;letter-spacing:.02em}
+
+  /* ---- cards ---- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:18px;
+    padding:22px;transition:.25s;position:relative}
+  .card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--lavender)}
+  .card .tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.04em;
+    color:var(--orchid);background:var(--lilac);padding:4px 11px;border-radius:100px;
+    margin-bottom:13px}
+  .card h3{font-family:'Fraunces',serif;font-weight:500;font-size:18px;
+    line-height:1.3;margin-bottom:9px}
+  .card p{font-size:14px;color:var(--muted);line-height:1.55}
+  .card .meta{display:flex;gap:10px;align-items:center;margin-top:15px;
+    padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+  .card a.open{color:var(--orchid);text-decoration:none;font-weight:600;
+    margin-left:auto;display:inline-flex;align-items:center;gap:4px}
+  .card a.open:hover{gap:7px}
+
+  /* hook cards */
+  .hook{border-left:3px solid var(--lavender)}
+  .hook .quote{font-family:'Fraunces',serif;font-style:italic;font-size:17px;
+    line-height:1.4;color:var(--ink);margin-bottom:12px}
+
+  /* bench cards */
+  .bench{display:flex;gap:14px;align-items:flex-start}
+  .avatar{width:46px;height:46px;border-radius:14px;flex-shrink:0;
+    background:linear-gradient(135deg,var(--lavender),var(--lilac));
+    display:grid;place-items:center;font-family:'Fraunces',serif;
+    font-weight:600;color:var(--orchid-deep);font-size:18px}
+
+  /* ---- AI studio ---- */
+  .studio{display:grid;grid-template-columns:340px 1fr;gap:22px;align-items:start}
+  @media(max-width:820px){.studio{grid-template-columns:1fr}}
+  .panel{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:24px}
+  .panel h3{font-family:'Fraunces',serif;font-weight:500;font-size:19px;margin-bottom:6px}
+  .panel .hint{font-size:13px;color:var(--muted);margin-bottom:20px}
+  .tool{width:100%;text-align:left;font-family:inherit;background:var(--paper);
+    border:1px solid var(--line);border-radius:13px;padding:14px 16px;
+    cursor:pointer;transition:.2s;margin-bottom:10px;display:flex;
+    align-items:center;gap:12px}
+  .tool:hover{border-color:var(--orchid);background:var(--lilac)}
+  .tool.on{border-color:var(--orchid);background:var(--lilac)}
+  .tool .ico{width:34px;height:34px;border-radius:10px;background:var(--white);
+    display:grid;place-items:center;flex-shrink:0;border:1px solid var(--line)}
+  .tool .tt{font-weight:600;font-size:14px}
+  .tool .td{font-size:12px;color:var(--muted)}
+  label.fld{display:block;font-size:13px;font-weight:600;margin-bottom:8px}
+  textarea,input.txt{width:100%;font-family:inherit;font-size:14px;
+    border:1px solid var(--line);border-radius:13px;padding:13px 15px;
+    background:var(--paper);resize:vertical;transition:.2s;color:var(--ink)}
+  textarea{min-height:110px}
+  textarea:focus,input.txt:focus{outline:none;border-color:var(--orchid);
+    background:#fff;box-shadow:0 0 0 3px rgba(115,80,185,.1)}
+  .run{margin-top:16px;font-family:inherit;font-size:15px;font-weight:600;
+    color:#fff;background:linear-gradient(135deg,var(--orchid),var(--orchid-deep));
+    border:none;border-radius:13px;padding:13px 26px;cursor:pointer;transition:.2s;
+    display:inline-flex;align-items:center;gap:9px}
+  .run:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+  .run:disabled{opacity:.55;cursor:wait;transform:none}
+  .out{margin-top:20px;padding:20px;border-radius:15px;background:var(--lilac);
+    border:1px solid var(--line);font-size:14.5px;line-height:1.7;
+    white-space:pre-wrap;min-height:60px;color:var(--ink)}
+  .out:empty::before{content:'结果会出现在这里 ✦';color:var(--muted);font-style:italic}
+
+  /* ---- states ---- */
+  .loading,.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+  .empty h3{font-family:'Fraunces',serif;font-size:20px;color:var(--ink);margin-bottom:8px}
+  .spinner{width:34px;height:34px;border:3px solid var(--line);
+    border-top-color:var(--orchid);border-radius:50%;
+    animation:spin .8s linear infinite;margin:0 auto 18px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  footer{padding:28px 0;border-top:1px solid var(--line);text-align:center;
+    font-size:12px;color:var(--muted)}
+  footer em{font-family:'Fraunces',serif;font-style:italic;color:var(--orchid)}
+
+  @media(max-width:720px){
+    .strip{grid-template-columns:repeat(2,1fr)}
+    .hero{padding:36px 0 20px}
+  }
 </style>
 </head>
 <body>
-<div class="app">
-<div class="header">
-<h1><i class="ti ti-sparkles" style="font-size:18px;vertical-align:-2px;margin-right:4px"></i>MAE content studio</h1>
-<p>Inspiration + AI tools for PD / CCS / CVP</p>
-</div>
-<div class="nav">
-<button class="nav-btn on" onclick="showSec('insp',this)"><i class="ti ti-bulb" style="font-size:15px"></i>Inspiration</button>
-<button class="nav-btn" onclick="showSec('hooks',this)"><i class="ti ti-quote" style="font-size:15px"></i>Hooks</button>
-<button class="nav-btn" onclick="showSec('bench',this)"><i class="ti ti-users" style="font-size:15px"></i>Benchmarks</button>
-<button class="nav-btn" onclick="showSec('ai-hook',this)"><i class="ti ti-sparkles" style="font-size:15px"></i>AI hook</button>
-<button class="nav-btn" onclick="showSec('ai-script',this)"><i class="ti ti-file-text" style="font-size:15px"></i>AI script</button>
-<button class="nav-btn" onclick="showSec('ai-series',this)"><i class="ti ti-layers-linked" style="font-size:15px"></i>AI series</button>
-</div>
+<div class="aura"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
 
-<div id="insp" class="section on">
-<div class="filters">
-<select id="f-acct" onchange="filterInsp()"><option value="">All accounts</option><option>CEO IP</option><option>品牌流量</option></select>
-<select id="f-judge" onchange="filterInsp()"><option value="">All types</option><option>系列种子</option><option>单条-热点</option><option>单条-强事件</option></select>
-<select id="f-source" onchange="filterInsp()"><option value="">All sources</option><option>团队收藏</option><option>AI发现</option><option>市场热点</option></select>
-<select id="f-identity" onchange="filterInsp()"><option value="">All identities</option><option>老板/创业者</option><option>职场女性</option><option>妈妈</option><option>女儿</option><option>老婆</option><option>家庭主妇</option><option>转型中的女性</option></select>
-</div>
-<div id="insp-count" class="count"></div>
-<div id="insp-list"><p class="loading"><i class="ti ti-loader-2" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Loading inspirations...</p></div>
-</div>
+<header>
+  <div class="wrap bar">
+    <div class="brand">
+      <div class="glyph">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l2.5 5.5L20 11l-5.5 2.5L12 19l-2.5-5.5L4 11l5.5-2.5L12 3z" fill="#fff"/></svg>
+      </div>
+      <div>
+        <h1>MAE AI Studio</h1>
+        <p>创意指挥室</p>
+      </div>
+    </div>
+    <div class="status"><span class="dot" id="conn"></span><span id="connTxt">连接中…</span></div>
+  </div>
+</header>
 
-<div id="hooks" class="section">
-<div class="filters">
-<select id="fh-type" onchange="filterHooks()"><option value="">All types</option><option>悬念型</option><option>反差型</option><option>数字型</option><option>痛点型</option><option>金句型</option><option>动作型</option><option>争议型</option></select>
-<select id="fh-acct" onchange="filterHooks()"><option value="">All accounts</option><option>CEO IP</option><option>品牌流量</option><option>通用</option></select>
-</div>
-<div id="hooks-list"><p class="loading"><i class="ti ti-loader-2" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Loading hooks...</p></div>
-</div>
+<main class="wrap">
+  <div class="hero">
+    <div class="eyebrow">Content Intelligence</div>
+    <h2>让每一条内容<br>都<em>被看见</em>。</h2>
+    <p class="sub">灵感、钩子、对标账号与 AI 创作工具，汇集在一处。为 25–45 岁的她，找到真正有共鸣的表达。</p>
+  </div>
 
-<div id="bench" class="section">
-<div id="bench-list"><p class="loading"><i class="ti ti-loader-2" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Loading benchmarks...</p></div>
-</div>
+  <nav class="tabs">
+    <button class="on" data-v="insp">灵感库</button>
+    <button data-v="hooks">钩子库</button>
+    <button data-v="bench">对标账号</button>
+    <button data-v="ai">AI 工作台</button>
+  </nav>
 
-<div id="ai-hook" class="section">
-<div class="row">
-<select id="ah-acct" style="max-width:160px"><option value="CEO IP">CEO IP</option><option value="Brand">Brand</option></select>
-<select id="ah-id" style="max-width:160px"><option value="职场女性">Workplace women</option><option value="老板/创业者">Boss / founder</option><option value="妈妈">Mother</option><option value="女儿">Daughter</option><option value="老婆">Wife</option><option value="家庭主妇">Homemaker</option></select>
-</div>
-<input id="ah-topic" placeholder="Topic: imposter syndrome, first hire, work-life balance..." style="margin-bottom:8px">
-<button class="btn" onclick="aiHook()" id="ah-btn"><i class="ti ti-sparkles" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Generate 5 hooks</button>
-<div id="ah-out" class="ai-out"></div>
-</div>
+  <!-- 灵感库 -->
+  <section class="view on" id="v-insp">
+    <div class="strip" id="inspStats"></div>
+    <div id="inspBody"><div class="loading"><div class="spinner"></div>正在读取灵感收藏库…</div></div>
+  </section>
 
-<div id="ai-script" class="section">
-<input id="as-hook" placeholder="Your hook (first 3 seconds)" style="margin-bottom:8px">
-<input id="as-km" placeholder="Key Message (one sentence to remember)" style="margin-bottom:8px">
-<div class="row">
-<select id="as-acct" style="max-width:160px"><option value="CEO IP">CEO IP</option><option value="Brand">Brand</option></select>
-<select id="as-dur" style="max-width:100px"><option value="15">15s</option><option value="30">30s</option><option value="60">60s</option></select>
-</div>
-<button class="btn" onclick="aiScript()" id="as-btn"><i class="ti ti-file-text" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Build script</button>
-<div id="as-out" class="ai-out"></div>
-</div>
+  <!-- 钩子库 -->
+  <section class="view" id="v-hooks">
+    <div id="hookBody"><div class="loading"><div class="spinner"></div>正在读取钩子灵感库…</div></div>
+  </section>
 
-<div id="ai-series" class="section">
-<input id="ax-name" placeholder="Series seed: Kate's failures, office POV, mom moments..." style="margin-bottom:8px">
-<div class="row">
-<select id="ax-acct" style="max-width:160px"><option value="CEO IP">CEO IP</option><option value="Brand">Brand</option></select>
-<select id="ax-eps" style="max-width:100px"><option value="8">8 eps</option><option value="5">5 eps</option><option value="10">10 eps</option></select>
-</div>
-<button class="btn" onclick="aiSeries()" id="ax-btn"><i class="ti ti-layers-linked" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Expand series</button>
-<div id="ax-out" class="ai-out"></div>
-</div>
-</div>
+  <!-- 对标账号 -->
+  <section class="view" id="v-bench">
+    <div id="benchBody"><div class="loading"><div class="spinner"></div>正在读取对标账号库…</div></div>
+  </section>
+
+  <!-- AI 工作台 -->
+  <section class="view" id="v-ai">
+    <div class="studio">
+      <div class="panel">
+        <h3>选择工具</h3>
+        <p class="hint">每个工具都内置 MAE 品牌语境</p>
+        <button class="tool on" data-tool="hook">
+          <span class="ico">✦</span>
+          <span><span class="tt">钩子生成</span><br><span class="td">前 3 秒抓住她</span></span>
+        </button>
+        <button class="tool" data-tool="script">
+          <span class="ico">✎</span>
+          <span><span class="tt">脚本搭建</span><br><span class="td">从钩子到落点</span></span>
+        </button>
+        <button class="tool" data-tool="series">
+          <span class="ico">❋</span>
+          <span><span class="tt">系列扩展</span><br><span class="td">一个想法变一季</span></span>
+        </button>
+      </div>
+      <div class="panel">
+        <h3 id="toolTitle">钩子生成</h3>
+        <p class="hint" id="toolHint">输入主题或场景，生成 5 个高共鸣钩子。</p>
+        <label class="fld">你的输入</label>
+        <textarea id="aiInput" placeholder="例如：一位妈妈重新开始学画画的故事…"></textarea>
+        <button class="run" id="runBtn" onclick="runAI()">
+          <span>生成</span><span>✦</span>
+        </button>
+        <div class="out" id="aiOut"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  MAE Global · <em>帮助更多女性看见自己的价值</em> · 内部创意工具
+</footer>
 
 <script>
-var allInsp=[],allHooks=[];
-var TC={'悬念型':['#EEEDFE','#3C3489','#AFA9EC'],'反差型':['#FAECE7','#712B13','#F0997B'],'数字型':['#E6F1FB','#0C447C','#85B7EB'],'痛点型':['#FCEBEB','#791F1F','#F09595'],'金句型':['#FBEAF0','#72243E','#ED93B1'],'提问型':['#EAF3DE','#27500A','#97C459'],'动作型':['#FAEEDA','#633806','#EF9F27'],'争议型':['#F1EFE8','#444441','#B4B2A9']};
-var JC={'系列种子':['#EEEDFE','#3C3489'],'单条-热点':['#FAECE7','#712B13'],'单条-强事件':['#E6F1FB','#0C447C'],'单条-测试':['#F1EFE8','#444441']};
-var SC={'团队收藏':['#E6F1FB','#0C447C'],'AI发现':['#EEEDFE','#3C3489'],'市场热点':['#FCEBEB','#791F1F']};
-var CC={'绿灯-可直接发':['#EAF3DE','#27500A'],'黄灯-需修改':['#FAEEDA','#633806'],'红灯-不可发':['#FCEBEB','#791F1F']};
+// ---------- tabs ----------
+const tabBtns=document.querySelectorAll('nav.tabs button');
+tabBtns.forEach(b=>b.onclick=()=>{
+  tabBtns.forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  document.getElementById('v-'+b.dataset.v).classList.add('on');
+});
 
-function showSec(id,el){document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));document.querySelectorAll('.section').forEach(s=>s.classList.remove('on'));el.classList.add('on');document.getElementById(id).classList.add('on')}
-function mkTag(text,colors){if(!text||!colors)return'';return'<span class="tag" style="background:'+colors[0]+';color:'+colors[1]+'">'+text+'</span>'}
+// ---------- safe fetch ----------
+async function getJSON(url){
+  try{
+    const r=await fetch(url);
+    const d=await r.json();
+    return Array.isArray(d)?d:(Array.isArray(d.results)?d.results:[]);
+  }catch(e){return [];}
+}
 
-function renderInsp(items){
-if(!items.length)return'<p class="empty">No inspirations found</p>';
-return items.map(i=>{
-var tags=mkTag(i.source,SC[i.source])+mkTag(i.account,i.account==='CEO IP'?['#EEEDFE','#3C3489']:['#E6F1FB','#0C447C'])+mkTag(i.judgment,JC[i.judgment])+mkTag(i.event,TC[i.event]||['#F1EFE8','#444441'])+mkTag(i.compliance,CC[i.compliance]);
-return'<div class="card"><div class="card-meta">'+tags+'</div><p class="card-title">'+i.title+'</p>'+(i.concept?'<p class="card-text" style="margin-bottom:4px">'+i.concept+'</p>':'')+(i.identity?'<p class="card-text" style="color:#888">Target: '+i.identity+'</p>':'')+(i.link?'<a class="card-link" href="'+i.link+'" target="_blank"><i class="ti ti-external-link" style="font-size:11px;vertical-align:-1px;margin-right:2px"></i>'+i.link.substring(0,50)+'...</a>':'')+'</div>'}).join('')}
+// ---------- connection dot ----------
+function setConn(ok){
+  const dot=document.getElementById('conn'),txt=document.getElementById('connTxt');
+  if(ok){dot.classList.add('live');txt.textContent='数据已连接';}
+  else{txt.textContent='等待数据';}
+}
 
-function filterInsp(){
-var a=document.getElementById('f-acct').value,j=document.getElementById('f-judge').value,s=document.getElementById('f-source').value,d=document.getElementById('f-identity').value;
-var f=allInsp.filter(i=>(!a||i.account===a)&&(!j||i.judgment===j)&&(!s||i.source===s)&&(!d||i.identity===d));
-document.getElementById('insp-count').textContent=f.length+' / '+allInsp.length+' inspirations';
-document.getElementById('insp-list').innerHTML=renderInsp(f)}
+// ---------- render helpers ----------
+function esc(s){return (s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
 
-function filterHooks(){
-var t=document.getElementById('fh-type').value,a=document.getElementById('fh-acct').value;
-var f=allHooks.filter(h=>(!t||h.type===t)&&(!a||h.account===a));
-document.getElementById('hooks-list').innerHTML=renderHooks(f)}
+function emptyState(msg){
+  return '<div class="empty"><h3>还没有内容 ✦</h3><p>'+msg+'</p></div>';
+}
 
-function renderHooks(items){
-return items.map(h=>{var c=TC[h.type]||['#F1EFE8','#444441','#B4B2A9'];
-return'<div class="hook-item" style="border-color:'+c[2]+'"><span class="hook-type" style="background:'+c[0]+';color:'+c[1]+'">'+h.type+'</span><p class="hook-text">'+h.content+'</p><p class="hook-note">'+h.example+'</p>'+(h.identity?'<p class="hook-note">Identity: '+(Array.isArray(h.identity)?h.identity.join(', '):h.identity)+'</p>':'')+'</div>'}).join('')}
+// ---------- 灵感库 ----------
+async function loadInsp(){
+  const data=await getJSON('/api/inspirations');
+  const body=document.getElementById('inspBody');
+  const stats=document.getElementById('inspStats');
+  if(data.length){setConn(true);}
+  const total=data.length;
+  const fmt={};data.forEach(d=>{const f=d.type||d.format||'其他';fmt[f]=(fmt[f]||0)+1;});
+  const topFmt=Object.keys(fmt).sort((a,b)=>fmt[b]-fmt[a])[0]||'—';
+  stats.innerHTML=[
+    ['灵感总数',total],
+    ['内容格式',Object.keys(fmt).length],
+    ['热门格式',topFmt],
+    ['本周新增',data.filter(d=>d.recent).length||'—']
+  ].map(s=>'<div class="stat"><div class="n">'+s[1]+'</div><div class="l">'+s[0]+'</div></div>').join('');
+  if(!total){body.innerHTML=emptyState('保存一条灵感到 Notion，它会出现在这里。');return;}
+  body.innerHTML='<div class="grid">'+data.map(d=>{
+    const title=esc(d.title||d.name||'未命名灵感');
+    const desc=esc(d.desc||d.description||d.note||'');
+    const tag=esc(d.type||d.format||'灵感');
+    const url=d.url||d.link||'';
+    return '<div class="card"><span class="tag">'+tag+'</span>'+
+      '<h3>'+title+'</h3>'+(desc?'<p>'+desc+'</p>':'')+
+      '<div class="meta">'+(d.account?'<span>'+esc(d.account)+'</span>':'')+
+      (url?'<a class="open" href="'+esc(url)+'" target="_blank">查看 →</a>':'')+
+      '</div></div>';
+  }).join('')+'</div>';
+}
 
-function renderBench(items){
-return items.map(b=>{var init=b.name.replace('@','').substring(0,2).toUpperCase();
-return'<div class="card"><div class="bench"><div class="bench-icon">'+init+'</div><div class="bench-info"><p class="bench-name">'+b.name+'</p><p class="bench-reason">'+b.reason+'</p><div class="bench-tags" style="margin-top:4px">'+mkTag(b.platform,['#EEEDFE','#3C3489'])+(Array.isArray(b.language)?b.language.map(l=>mkTag(l,['#E1F5EE','#085041'])).join(''):'')+(Array.isArray(b.types)?b.types.map(t=>mkTag(t,['#E6F1FB','#0C447C'])).join(''):'')+'</div>'+(b.link?'<a class="card-link" href="'+b.link+'" target="_blank" style="display:inline-block;margin-top:4px"><i class="ti ti-external-link" style="font-size:11px;vertical-align:-1px;margin-right:2px"></i>View profile</a>':'')+'</div></div></div>'}).join('')}
+// ---------- 钩子库 ----------
+async function loadHooks(){
+  const data=await getJSON('/api/hooks');
+  const body=document.getElementById('hookBody');
+  if(data.length)setConn(true);
+  if(!data.length){body.innerHTML=emptyState('钩子灵感库为空，或 Notion 尚未连接。');return;}
+  body.innerHTML='<div class="grid">'+data.map(d=>{
+    const q=esc(d.hook||d.title||d.name||d.text||'');
+    const type=esc(d.type||d.category||'钩子');
+    return '<div class="card hook"><span class="tag">'+type+'</span>'+
+      '<div class="quote">"'+q+'"</div>'+
+      (d.note?'<p>'+esc(d.note)+'</p>':'')+'</div>';
+  }).join('')+'</div>';
+}
 
-async function loadData(){
-try{var[i,h,b]=await Promise.all([fetch('/api/inspirations').then(r=>r.json()),fetch('/api/hooks').then(r=>r.json()),fetch('/api/benchmarks').then(r=>r.json())]);
-allInsp=i;allHooks=h;filterInsp();filterHooks();
-document.getElementById('bench-list').innerHTML=renderBench(b);
-}catch(e){document.getElementById('insp-list').innerHTML='<p class="error">Failed to load: '+e+'</p>'}}
+// ---------- 对标账号 ----------
+async function loadBench(){
+  const data=await getJSON('/api/benchmarks');
+  const body=document.getElementById('benchBody');
+  if(data.length)setConn(true);
+  if(!data.length){body.innerHTML=emptyState('对标账号库为空，或 Notion 尚未连接。');return;}
+  body.innerHTML='<div class="grid">'+data.map(d=>{
+    const name=esc(d.name||d.account||d.title||'账号');
+    const initial=(name.replace('@','')[0]||'?').toUpperCase();
+    const lang=esc(d.lang||d.language||'');
+    const note=esc(d.note||d.desc||d.description||d.style||'');
+    return '<div class="card"><div class="bench">'+
+      '<div class="avatar">'+initial+'</div>'+
+      '<div style="flex:1"><h3 style="margin-bottom:4px">'+name+'</h3>'+
+      (lang?'<span class="tag" style="margin:0">'+lang+'</span>':'')+
+      (note?'<p style="margin-top:10px">'+note+'</p>':'')+
+      '</div></div></div>';
+  }).join('')+'</div>';
+}
 
-async function aiCall(mode,params){var r=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode,params})});return(await r.json()).text}
+// ---------- AI 工作台 ----------
+const toolMeta={
+  hook:{title:'钩子生成',hint:'输入主题或场景，生成 5 个高共鸣钩子。',ph:'例如：一位妈妈重新开始学画画的故事…'},
+  script:{title:'脚本搭建',hint:'输入钩子或核心想法，生成完整短视频脚本。',ph:'例如：钩子 = "35 岁，我才第一次为自己活"…'},
+  series:{title:'系列扩展',hint:'输入一个成功选题，扩展成一整季内容。',ph:'例如："她的第一次" 系列…'}
+};
+let curTool='hook';
+document.querySelectorAll('.tool').forEach(t=>t.onclick=()=>{
+  document.querySelectorAll('.tool').forEach(x=>x.classList.remove('on'));
+  t.classList.add('on');curTool=t.dataset.tool;
+  const m=toolMeta[curTool];
+  document.getElementById('toolTitle').textContent=m.title;
+  document.getElementById('toolHint').textContent=m.hint;
+  document.getElementById('aiInput').placeholder=m.ph;
+  document.getElementById('aiOut').textContent='';
+});
 
-async function aiHook(){
-var topic=document.getElementById('ah-topic').value;if(!topic)return;
-document.getElementById('ah-btn').disabled=true;
-document.getElementById('ah-out').innerHTML='<p class="loading">Generating hooks...</p>';
-try{var raw=await aiCall('hook',{topic,account:document.getElementById('ah-acct').value,identity:document.getElementById('ah-id').value});
-var m=raw.match(/\[[\s\S]*\]/);var hooks=JSON.parse(m[0]);
-document.getElementById('ah-out').innerHTML='<div class="ai-card">'+hooks.map(h=>{var c=TC[h.type]||['#F1EFE8','#444441','#B4B2A9'];return'<div class="hook-item" style="border-color:'+c[2]+'"><span class="hook-type" style="background:'+c[0]+';color:'+c[1]+'">'+h.type+'</span><p class="hook-text">'+h.hook+'</p><p class="hook-note">Visual: '+h.visual+'</p><p class="hook-note">Why: '+h.why+'</p></div>'}).join('')+'</div>';
-}catch(e){document.getElementById('ah-out').innerHTML='<p class="error">Error. Try again.</p>'}
-document.getElementById('ah-btn').disabled=false}
+async function runAI(){
+  const input=document.getElementById('aiInput').value.trim();
+  const out=document.getElementById('aiOut');
+  const btn=document.getElementById('runBtn');
+  if(!input){out.textContent='请先输入内容 ✦';return;}
+  btn.disabled=true;out.textContent='思考中…';
+  try{
+    const r=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({tool:curTool,input})});
+    const d=await r.json();
+    out.textContent=d.result||d.error||'没有返回结果，请稍后再试。';
+  }catch(e){out.textContent='生成失败：'+e.message;}
+  btn.disabled=false;
+}
 
-async function aiScript(){
-var hook=document.getElementById('as-hook').value,km=document.getElementById('as-km').value;if(!hook||!km)return;
-document.getElementById('as-btn').disabled=true;
-document.getElementById('as-out').innerHTML='<p class="loading">Building script...</p>';
-try{var raw=await aiCall('script',{hook,km,account:document.getElementById('as-acct').value,duration:document.getElementById('as-dur').value});
-var m=raw.match(/\{[\s\S]*\}/);var s=JSON.parse(m[0]);
-var h='<div class="ai-card"><p style="font-size:12px;color:#888;margin-bottom:8px">'+s.target_identity+' — She feels: '+s.she_feels+'</p>';
-s.structure.forEach(st=>{h+='<div class="time-row"><span class="time-label">'+st.time+'</span><div><p class="time-text">'+st.action+'</p>'+(st.text?'<p class="time-sub">Text: '+st.text+'</p>':'')+(st.audio?'<p class="time-sub">Audio: '+st.audio+'</p>':'')+'</div></div>'});
-h+='<div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap"><div style="flex:1;min-width:150px"><p style="font-size:11px;color:#888">Shooting</p><p style="font-size:12px;color:#666">'+s.shooting+'</p></div><div style="flex:1;min-width:150px"><p style="font-size:11px;color:#888">Editing</p><p style="font-size:12px;color:#666">'+s.editing+'</p></div></div>';
-h+='<div class="caption-box"><p style="font-size:11px;color:#888;margin-bottom:4px">Caption</p><p class="caption-text">'+s.caption+'</p></div></div>';
-document.getElementById('as-out').innerHTML=h;
-}catch(e){document.getElementById('as-out').innerHTML='<p class="error">Error. Try again.</p>'}
-document.getElementById('as-btn').disabled=false}
-
-async function aiSeries(){
-var name=document.getElementById('ax-name').value;if(!name)return;
-document.getElementById('ax-btn').disabled=true;
-document.getElementById('ax-out').innerHTML='<p class="loading">Expanding series...</p>';
-try{var raw=await aiCall('series',{name,account:document.getElementById('ax-acct').value,episodes:document.getElementById('ax-eps').value});
-var m=raw.match(/\{[\s\S]*\}/);var s=JSON.parse(m[0]);
-var h='<div class="ai-card"><p style="font-size:16px;font-weight:500;margin-bottom:2px">'+s.series_name+'</p><p style="font-size:12px;color:#666;margin-bottom:2px">'+s.core_suspense+'</p><p style="font-size:11px;color:#888;margin-bottom:10px">'+s.target_identity+' · '+s.rhythm+'</p>';
-s.episodes.forEach(ep=>{h+='<div class="ep"><p class="ep-num">EP '+ep.ep+'</p><p class="ep-title">'+ep.title+'</p><p class="ep-detail">KM: '+ep.key_message+'</p><p class="ep-detail">Hook: '+ep.hook+'</p><p class="ep-detail">Format: '+ep.format+'</p><p class="ep-detail" style="color:#888">She feels: '+ep.she_feels+'</p></div>'});
-h+='</div>';document.getElementById('ax-out').innerHTML=h;
-}catch(e){document.getElementById('ax-out').innerHTML='<p class="error">Error. Try again.</p>'}
-document.getElementById('ax-btn').disabled=false}
-
-loadData();
+// ---------- boot ----------
+loadInsp();loadHooks();loadBench();
 </script>
 </body>
 </html>
