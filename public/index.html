@@ -295,6 +295,12 @@
   footer{padding:28px 0;border-top:1px solid var(--line);text-align:center;
     font-size:12px;color:var(--muted)}
   footer em{font-family:'Fraunces',serif;font-style:italic;color:var(--orchid)}
+  .guide-link{display:inline-flex;align-items:center;gap:6px;font-size:14px;
+    font-weight:600;color:var(--orchid);text-decoration:none;
+    padding:9px 20px;border-radius:100px;border:1px solid var(--line);
+    background:var(--white);transition:.2s}
+  .guide-link:hover{border-color:var(--lavender);background:var(--lilac);
+    transform:translateY(-1px)}
 
   @media(max-width:720px){
     .strip{grid-template-columns:repeat(2,1fr)}
@@ -417,7 +423,8 @@
 </main>
 
 <footer class="wrap">
-  MAE Global · <em>帮助更多女性看见自己的价值</em> · 内部创意工具
+  <a class="guide-link" href="https://app.notion.com/p/392bdfff2af081198d2bc46b48be4bae" target="_blank">📘 团队使用说明</a>
+  <div style="margin-top:12px">MAE Global · <em>帮助更多女性看见自己的价值</em> · 内部创意工具</div>
 </footer>
 
 <script>
