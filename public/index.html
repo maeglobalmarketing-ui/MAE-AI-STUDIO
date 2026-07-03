@@ -184,12 +184,56 @@
   .send-btn.primary{background:var(--orchid);color:#fff;border-color:var(--orchid)}
   .send-btn.primary:hover{color:#fff;background:var(--orchid-deep)}
   .send-note{font-size:12px;color:var(--muted);line-height:1.55;margin-top:12px}
+  .next-step{margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}
+  .ns-title{font-family:'Fraunces',serif;font-weight:500;font-size:16px;
+    color:var(--orchid-deep);margin-bottom:4px}
+  .ns-sub{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:13px}
+  .ns-btns{display:flex;flex-wrap:wrap;gap:10px}
+  .ns-btn{display:inline-flex;align-items:center;font-family:inherit;font-size:14px;
+    font-weight:600;text-decoration:none;padding:10px 20px;border-radius:11px;
+    border:1px solid var(--line);background:var(--white);color:var(--orchid);
+    transition:.18s}
+  .ns-btn:hover{border-color:var(--orchid);background:var(--lilac);
+    transform:translateY(-1px)}
   /* 灵感卡 AI 分析展示 */
   .key-insight{margin:12px 0 4px}
   .watch-btn{display:block;text-align:center;margin-top:14px;font-family:inherit;
     font-size:14px;font-weight:600;text-decoration:none;padding:11px 18px;
     border-radius:12px;background:var(--orchid);color:#fff;transition:.18s}
   .watch-btn:hover{background:var(--orchid-deep);transform:translateY(-1px)}
+  .notion-add-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    margin-bottom:20px}
+  .notion-add{display:inline-flex;align-items:center;gap:6px;font-family:inherit;
+    font-size:14px;font-weight:600;text-decoration:none;padding:10px 20px;
+    border-radius:11px;background:var(--orchid);color:#fff;transition:.18s}
+  .notion-add:hover{background:var(--orchid-deep);transform:translateY(-1px)}
+  .notion-add-note{font-size:12.5px;color:var(--muted)}
+  /* 快捷指令安装横幅 */
+  .sc-banner{background:linear-gradient(135deg,var(--lilac),#F6F1FB);
+    border:1px solid var(--line);border-radius:16px;padding:20px 22px;
+    margin-bottom:22px}
+  .sc-main{display:flex;align-items:center;justify-content:space-between;
+    gap:18px;flex-wrap:wrap}
+  .sc-title{font-family:'Fraunces',serif;font-weight:500;font-size:18px;
+    color:var(--ink);margin-bottom:4px}
+  .sc-sub{font-size:13.5px;color:var(--muted);line-height:1.5;max-width:52ch}
+  .sc-install{flex-shrink:0;display:inline-flex;align-items:center;
+    font-family:inherit;font-size:14px;font-weight:600;text-decoration:none;
+    padding:12px 24px;border-radius:12px;background:var(--orchid);color:#fff;
+    transition:.18s;white-space:nowrap}
+  .sc-install:hover{background:var(--orchid-deep);transform:translateY(-1px)}
+  .sc-toggle{margin-top:14px;font-family:inherit;font-size:13px;font-weight:600;
+    cursor:pointer;padding:7px 15px;border-radius:100px;
+    border:1px solid rgba(115,80,185,.25);background:rgba(255,255,255,.7);
+    color:var(--orchid);transition:.18s}
+  .sc-toggle:hover{background:#fff}
+  .sc-guide{margin-top:16px;display:flex;flex-direction:column;gap:14px}
+  .sc-step{display:flex;gap:12px;align-items:flex-start;font-size:13.5px;
+    line-height:1.6;color:var(--ink)}
+  .sc-num{flex-shrink:0;width:24px;height:24px;border-radius:50%;
+    background:var(--orchid);color:#fff;display:grid;place-items:center;
+    font-size:13px;font-weight:600}
+  .sc-warn{display:block;margin-top:4px;font-size:12.5px;color:#B7851A}
   .an-comp{margin-bottom:10px}
   .comp-badge{display:inline-block;font-size:12px;font-weight:600;
     padding:4px 12px;border-radius:100px;margin-bottom:8px}
@@ -370,6 +414,21 @@
 
   <!-- 灵感库 -->
   <section class="view" id="v-insp">
+    <div class="sc-banner">
+      <div class="sc-main">
+        <div class="sc-text">
+          <div class="sc-title">📱 一键存灵感到这里</div>
+          <div class="sc-sub">装上「Save to MAE」快捷指令，刷 IG / TikTok 时一键把好内容存进灵感库</div>
+        </div>
+        <a class="sc-install" href="https://www.icloud.com/shortcuts/f4a8d9da1132478ba249d9122c5d9c80" target="_blank">安装快捷指令</a>
+      </div>
+      <button class="sc-toggle" onclick="toggleSc()" id="scToggle">▾ 怎么用？</button>
+      <div class="sc-guide" id="scGuide" style="display:none">
+        <div class="sc-step"><span class="sc-num">1</span><div><b>安装（每人一次）</b><br>用 iPhone 的 <b>Safari</b> 点上面「安装快捷指令」→ 下拉 → 点「添加快捷指令」。零配置。<span class="sc-warn">⚠️ 必须用 Safari，电脑 / 微信 / Chrome 打不开。</span></div></div>
+        <div class="sc-step"><span class="sc-num">2</span><div><b>存灵感</b><br>在 IG / TikTok 看到好内容 → 点<b>分享</b> → 选 <b>Save to MAE</b> → 选账号方向 → 写一句话（随手写，不用有压力）→ 完成。</div></div>
+        <div class="sc-step"><span class="sc-num">3</span><div><b>查看</b><br>存好的灵感几秒后就会出现在下面的灵感库里，刷新即可看到。</div></div>
+      </div>
+    </div>
     <div class="strip" id="inspStats"></div>
     <div id="inspFilters"></div>
     <div id="inspBody"><div class="loading"><div class="spinner"></div>正在读取灵感收藏库…</div></div>
@@ -377,11 +436,19 @@
 
   <!-- 钩子库 -->
   <section class="view" id="v-hooks">
+    <div class="notion-add-bar">
+      <a class="notion-add" href="https://www.notion.so/f9f9b501cb1342e5a079b0a0c43ae46d" target="_blank">+ 在 Notion 添加钩子</a>
+      <span class="notion-add-note">添加在 Notion，几秒后刷新 Dashboard 就会出现</span>
+    </div>
     <div id="hookBody"><div class="loading"><div class="spinner"></div>正在读取钩子灵感库…</div></div>
   </section>
 
   <!-- 对标账号 -->
   <section class="view" id="v-bench">
+    <div class="notion-add-bar">
+      <a class="notion-add" href="https://www.notion.so/2fae21035ba34b82ba7bc274087738ee" target="_blank">+ 在 Notion 添加对标账号</a>
+      <span class="notion-add-note">添加在 Notion，几秒后刷新 Dashboard 就会出现</span>
+    </div>
     <div id="benchBody"><div class="loading"><div class="spinner"></div>正在读取对标账号库…</div></div>
   </section>
 
@@ -422,6 +489,14 @@
             <button class="send-btn" onclick="sendTo('gemini')">在 Gemini 打开</button>
           </div>
           <p class="send-note">复制永远可用。跳转按钮会打开对应 AI；ChatGPT 通常能自动带入，Claude / Gemini 若没自动填，粘贴即可（已帮你复制）。</p>
+          <div class="next-step">
+            <div class="ns-title">✦ 生成好内容后，下一步</div>
+            <div class="ns-sub">把满意的内容变成可执行的提案，或存进钩子库沉淀下来</div>
+            <div class="ns-btns">
+              <a class="ns-btn" href="https://www.notion.so/9c9faa2a3515414d80d92af4fa5a17ba" target="_blank">📋 存进提案库</a>
+              <a class="ns-btn" href="https://www.notion.so/f9f9b501cb1342e5a079b0a0c43ae46d" target="_blank">✦ 加进钩子库</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -596,6 +671,15 @@ function anRow(label,val){
   if(!val) return '';
   return '<div class="an-row"><span class="an-k">'+label+'</span><span class="an-v">'+esc(val)+'</span></div>';
 }
+// 展开/收起快捷指令说明
+window.toggleSc=function(){
+  var g=document.getElementById('scGuide');
+  var btn=document.getElementById('scToggle');
+  if(!g)return;
+  if(g.style.display==='none'){g.style.display='block';btn.textContent='▴ 收起';}
+  else{g.style.display='none';btn.textContent='▾ 怎么用？';}
+};
+
 // 展开/收起分析
 window.toggleAn=function(i){
   var el=document.getElementById('an'+i);
