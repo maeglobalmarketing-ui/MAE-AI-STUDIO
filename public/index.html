@@ -119,6 +119,20 @@
   .hook{border-left:3px solid var(--lavender)}
   .hook .quote{font-family:'Fraunces',serif;font-style:italic;font-size:17px;
     line-height:1.4;color:var(--ink);margin-bottom:12px}
+  .hook-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:13px}
+  .tag-acct{background:var(--orchid);color:#fff}
+
+  /* filters */
+  .filters{display:flex;flex-direction:column;gap:11px;margin-bottom:8px}
+  .frow{display:flex;align-items:center;flex-wrap:wrap;gap:7px}
+  .frow .fk{font-size:12px;font-weight:600;color:var(--muted);
+    min-width:34px;letter-spacing:.04em}
+  .chip{font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;
+    padding:6px 14px;border-radius:100px;border:1px solid var(--line);
+    background:var(--white);color:var(--muted);transition:.18s}
+  .chip:hover{border-color:var(--lavender);color:var(--orchid)}
+  .chip.on{background:var(--orchid);border-color:var(--orchid);color:#fff}
+  .fcount{font-size:12px;color:var(--muted);margin:14px 0 16px}
 
   /* bench cards */
   .bench{display:flex;gap:14px;align-items:flex-start}
@@ -206,31 +220,33 @@
     font-size:11.5px;color:var(--muted)}
 
   /* ---- account framework ---- */
-  .account-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .account-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:18px;align-items:start}
   @media(max-width:760px){.account-grid{grid-template-columns:1fr}}
   .acct{border-radius:20px;padding:30px;border:1px solid var(--line);
-    position:relative;overflow:hidden}
+    position:relative;overflow:hidden;min-width:0}
   .acct.ceo{background:linear-gradient(160deg,#fff,var(--lilac))}
-  .acct.brand{background:linear-gradient(160deg,#fff,#F6F1FB)}
-  .acct-head{display:flex;align-items:center;gap:13px;margin-bottom:6px}
+  .acct.acct-brand{background:linear-gradient(160deg,#fff,#F6F1FB)}
+  .acct-head{display:flex;align-items:center;gap:13px;margin-bottom:6px;min-width:0}
   .acct-badge{width:46px;height:46px;border-radius:13px;flex-shrink:0;
     display:grid;place-items:center;font-size:22px;color:#fff}
   .acct.ceo .acct-badge{background:linear-gradient(135deg,var(--orchid),var(--orchid-deep))}
-  .acct.brand .acct-badge{background:linear-gradient(135deg,var(--lavender),var(--orchid))}
+  .acct.acct-brand .acct-badge{background:linear-gradient(135deg,var(--lavender),var(--orchid))}
   .acct-head h4{font-family:'Fraunces',serif;font-weight:500;font-size:21px}
   .acct-head .handle{font-size:12px;color:var(--muted);font-weight:500}
   .acct-tagline{font-family:'Fraunces',serif;font-style:italic;font-size:17px;
     line-height:1.45;margin:16px 0 8px;padding-bottom:20px;
-    border-bottom:1px solid rgba(115,80,185,.14)}
+    border-bottom:1px solid rgba(115,80,185,.14);
+    overflow-wrap:break-word;word-break:normal}
   .acct.ceo .acct-tagline{color:var(--orchid-deep)}
-  .acct.brand .acct-tagline{color:var(--orchid)}
+  .acct.acct-brand .acct-tagline{color:var(--orchid)}
   .acct-row{padding:18px 0 0}
   .acct-row .lbl{display:inline-block;font-size:12px;font-weight:600;
     letter-spacing:.02em;color:var(--orchid-deep);background:rgba(255,255,255,.7);
     padding:4px 12px;border-radius:100px;margin-bottom:9px}
-  .acct.brand .acct-row .lbl{color:var(--orchid)}
+  .acct.acct-brand .acct-row .lbl{color:var(--orchid)}
   .acct-row .val{font-size:15px;line-height:1.75;color:var(--ink);
-    padding-left:2px}
+    padding-left:2px;overflow-wrap:break-word;word-break:normal}
   .acct-row .val .no{color:#C0392B;font-weight:600}
   .acct-row .val .yes{color:#1E8A5A;font-weight:600}
   .bridge{grid-column:1/-1;background:var(--white);border:1px dashed var(--lavender);
@@ -464,18 +480,54 @@ function igEmbed(url){
 }
 
 // ---------- 钩子库 ----------
+// ---------- 钩子库（三维筛选） ----------
+let allHooks=[];
+const hookFilters={account:'全部',type:'全部',identity:'全部'};
 async function loadHooks(){
-  const data=await getJSON('/api/hooks');
+  allHooks=await getJSON('/api/hooks');
+  if(allHooks.length)setConn(true);
+  renderHooks();
+}
+function uniqVals(key){
+  const s=new Set();
+  allHooks.forEach(d=>{const v=(d[key]||'').trim();if(v)s.add(v);});
+  return Array.from(s);
+}
+function filterChip(dim,val){
+  const on=hookFilters[dim]===val;
+  return '<button class="chip'+(on?' on':'')+'" onclick="setHookFilter(\''+dim+'\',\''+val+'\')">'+esc(val)+'</button>';
+}
+window.setHookFilter=function(dim,val){hookFilters[dim]=val;renderHooks();};
+function renderHooks(){
   const body=document.getElementById('hookBody');
-  if(data.length)setConn(true);
-  if(!data.length){body.innerHTML=emptyState('钩子灵感库为空，或 Notion 尚未连接。');return;}
-  body.innerHTML='<div class="grid">'+data.map(d=>{
+  if(!allHooks.length){body.innerHTML=emptyState('钩子灵感库为空，或 Notion 尚未连接。');return;}
+  const accounts=uniqVals('account'),types=uniqVals('type'),ids=uniqVals('identity');
+  let bar='<div class="filters">';
+  if(accounts.length){bar+='<div class="frow"><span class="fk">账号</span>'+
+    ['全部'].concat(accounts).map(v=>filterChip('account',v)).join('')+'</div>';}
+  if(types.length){bar+='<div class="frow"><span class="fk">类型</span>'+
+    ['全部'].concat(types).map(v=>filterChip('type',v)).join('')+'</div>';}
+  if(ids.length){bar+='<div class="frow"><span class="fk">身份</span>'+
+    ['全部'].concat(ids).map(v=>filterChip('identity',v)).join('')+'</div>';}
+  bar+='</div>';
+  const shown=allHooks.filter(d=>{
+    return (hookFilters.account==='全部'||(d.account||'')===hookFilters.account)
+      && (hookFilters.type==='全部'||(d.type||'')===hookFilters.type)
+      && (hookFilters.identity==='全部'||(d.identity||'')===hookFilters.identity);
+  });
+  let cards;
+  if(!shown.length){cards='<div class="empty"><p>没有符合筛选条件的钩子，换个组合试试。</p></div>';}
+  else{cards='<div class="grid">'+shown.map(d=>{
     const q=esc(d.hook||d.title||d.name||d.text||'');
     const type=esc(d.type||d.category||'钩子');
-    return '<div class="card hook"><span class="tag">'+type+'</span>'+
+    const acct=esc(d.account||'');
+    return '<div class="card hook"><div class="hook-tags">'+
+      '<span class="tag">'+type+'</span>'+
+      (acct?'<span class="tag tag-acct">'+acct+'</span>':'')+'</div>'+
       '<div class="quote">"'+q+'"</div>'+
       (d.note?'<p>'+esc(d.note)+'</p>':'')+'</div>';
-  }).join('')+'</div>';
+  }).join('')+'</div>';}
+  body.innerHTML=bar+'<div class="fcount">显示 '+shown.length+' / '+allHooks.length+' 条</div>'+cards;
 }
 
 // ---------- 对标账号 ----------
@@ -489,11 +541,13 @@ async function loadBench(){
     const initial=(name.replace('@','')[0]||'?').toUpperCase();
     const lang=esc(d.lang||d.language||'');
     const note=esc(d.note||d.desc||d.description||d.style||'');
+    const url=d.url||d.link||'';
     return '<div class="card"><div class="bench">'+
       '<div class="avatar">'+initial+'</div>'+
       '<div style="flex:1"><h3 style="margin-bottom:4px">'+name+'</h3>'+
       (lang?'<span class="tag" style="margin:0">'+lang+'</span>':'')+
       (note?'<p style="margin-top:10px">'+note+'</p>':'')+
+      (url?'<a class="open" style="margin-top:12px;display:inline-flex" href="'+esc(url)+'" target="_blank">查看账号 →</a>':'')+
       '</div></div></div>';
   }).join('')+'</div>';
 }
@@ -568,7 +622,7 @@ const accounts=[
      ['合规红线','<span class="yes">可</span>：高表达自由、真实出镜、情绪脆弱。<span class="no">不可</span>：照读广告文案、硬推产品。'],
      ['转接方式','用信任把观众带到品牌世界——「我一路走来靠的这些，MAE 想帮更多她做到」，自然过渡，不硬销。']
    ]},
-  {cls:'brand',icon:'❋',name:'MAE 品牌号',handle:'@maeglobalofficial · 品牌流量',
+  {cls:'acct-brand',icon:'❋',name:'MAE 品牌号',handle:'@maeglobalofficial · 品牌流量',
    tagline:'用「很多个她」照见——这就是我。',
    rows:[
      ['分工定位','提供路径与归属。不靠单一个人，通过各种女性的具体场景，让观众在别人的故事里看见自己，并被接住——你不孤单。'],
