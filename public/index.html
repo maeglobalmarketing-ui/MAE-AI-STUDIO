@@ -133,6 +133,7 @@
   .chip:hover{border-color:var(--lavender);color:var(--orchid)}
   .chip.on{background:var(--orchid);border-color:var(--orchid);color:#fff}
   .fcount{font-size:12px;color:var(--muted);margin:14px 0 16px}
+  .insp-topbar .fcount{margin:0}
 
   /* bench cards */
   .bench{display:flex;gap:14px;align-items:flex-start}
@@ -183,6 +184,15 @@
   .send-btn.primary{background:var(--orchid);color:#fff;border-color:var(--orchid)}
   .send-btn.primary:hover{color:#fff;background:var(--orchid-deep)}
   .send-note{font-size:12px;color:var(--muted);line-height:1.55;margin-top:12px}
+  .insp-topbar{display:flex;align-items:center;justify-content:space-between;
+    gap:14px;flex-wrap:wrap;margin:14px 0 16px}
+  .batch-btn{white-space:nowrap}
+  .extract-btn{margin-top:14px;width:100%;font-family:inherit;font-size:13px;
+    font-weight:600;cursor:pointer;padding:9px 14px;border-radius:11px;
+    border:1px solid var(--line);background:var(--paper);color:var(--orchid);
+    transition:.18s}
+  .extract-btn:hover{border-color:var(--orchid);background:var(--lilac);
+    transform:translateY(-1px)}
 
   /* ---- states ---- */
   .loading,.empty{text-align:center;padding:60px 20px;color:var(--muted)}
@@ -516,8 +526,9 @@ function renderInsp(){
       '<div class="empty"><p>没有符合筛选条件的灵感，换个组合试试。</p></div>';
     return;
   }
-  body.innerHTML='<div class="fcount">显示 '+shown.length+' / '+allInsp.length+' 条</div>'+
-    '<div class="grid">'+shown.map(d=>{
+  body.innerHTML='<div class="insp-topbar"><div class="fcount">显示 '+shown.length+' / '+allInsp.length+' 条</div>'+
+    (shown.length?'<button class="send-btn primary batch-btn" onclick="extractBatch()">✦ 批量提炼钩子（当前 '+shown.length+' 条）</button>':'')+'</div>'+
+    '<div class="grid">'+shown.map((d,i)=>{
     const title=esc(d.title||d.name||'未命名灵感');
     const desc=esc(d.desc||d.description||d.note||'');
     const tag=esc(d.type||d.format||'灵感');
@@ -533,10 +544,41 @@ function renderInsp(){
       (desc?'<p>'+desc+'</p>':'')+
       '<div class="meta">'+(d.identity?'<span>'+esc(d.identity)+'</span>':'')+
       (url?'<a class="open" href="'+esc(url)+'" target="_blank">看原片 ▶</a>':'')+
-      '</div></div>';
+      '</div>'+
+      '<button class="extract-btn" onclick="extractOne('+i+')">✦ 提炼钩子</button>'+
+      '</div>';
   }).join('')+'</div>';
+  window._inspShown=shown;
   if(window.instgrm && window.instgrm.Embeds){window.instgrm.Embeds.process();}
 }
+
+// 从灵感提炼钩子的 prompt 组装（复用 MAE 品牌语境）
+function hookExtractPrompt(items){
+  var body='';
+  items.forEach(function(d,i){
+    body+='\n'+(i+1)+'. 标题：'+(d.title||d.name||'')+
+      (d.desc?'\n   拆解：'+d.desc:'')+
+      (d.account?'\n   账号：'+d.account:'')+
+      (d.identity?'\n   身份：'+d.identity:'')+'\n';
+  });
+  return MAE_CONTEXT+
+    '【任务】下面是团队收藏的爆款灵感。请从每一条里提炼出它「前 3 秒」用的开场钩子，并标注钩子类型（悬念/反差/数字/提问/痛点/金句等）、适用账号、适用身份。输出格式：每条一行「钩子内容 | 类型 | 适用账号 | 适用身份」，方便我直接填进钩子库。\n\n【灵感清单】'+body;
+}
+function openAIWith(text){
+  if(navigator.clipboard) navigator.clipboard.writeText(text).catch(function(){});
+  // 默认跳 ChatGPT（可自动带入），并已复制兜底
+  window.open('https://chatgpt.com/?q='+encodeURIComponent(text),'_blank');
+}
+window.extractOne=function(i){
+  var d=(window._inspShown||[])[i];
+  if(!d)return;
+  openAIWith(hookExtractPrompt([d]));
+};
+window.extractBatch=function(){
+  var items=window._inspShown||[];
+  if(!items.length)return;
+  openAIWith(hookExtractPrompt(items));
+};
 
 // build an Instagram embed block for a reel/post url; empty string if not IG
 function igEmbed(url){
