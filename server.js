@@ -3,8 +3,8 @@ const app = express();
 app.use(express.json());
 app.use(express.static('public'));
 
-const NOTION_KEY = process.env.NOTION_KEY || '';
-const CLAUDE_KEY = process.env.CLAUDE_KEY || '';
+const NOTION_KEY = process.env.MAE_NOTION_TOKEN || process.env.NOTION_KEY || '';
+const CLAUDE_KEY = process.env.MAE_CLAUDE_KEY || process.env.CLAUDE_KEY || '';
 const INSP_DB  = '3f2b821c14444d079502177652141530';
 const HOOK_DB  = 'f9f9b501cb1342e5a079b0a0c43ae46d';
 const BENCH_DB = '2fae21035ba34b82ba7bc274087738ee';
