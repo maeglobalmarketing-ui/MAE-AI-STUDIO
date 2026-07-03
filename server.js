@@ -8,6 +8,7 @@ const CLAUDE_KEY = process.env.MAE_CLAUDE_KEY || process.env.CLAUDE_KEY || '';
 const INSP_DB  = '3f2b821c14444d079502177652141530';
 const HOOK_DB  = 'f9f9b501cb1342e5a079b0a0c43ae46d';
 const BENCH_DB = '2fae21035ba34b82ba7bc274087738ee';
+const PROP_DB  = '9c9faa2a3515414d80d92af4fa5a17ba';
 
 // --- Notion query with real logging (no silent swallow) ---
 async function notionQuery(label, dbId) {
@@ -107,6 +108,24 @@ app.get('/api/benchmarks', async function(req, res) {
       lang: getProp(p,'语言'),
       note: getProp(p,'对标原因') || getProp(p,'内容类型'),
       url: getProp(p,'链接')
+    };
+  }));
+});
+
+app.get('/api/proposals', async function(req, res) {
+  var rows = await notionQuery('PROP', PROP_DB);
+  res.json(rows.map(function(p) {
+    return {
+      name:     getTitle(p) || getProp(p,'系列名'),
+      status:   getProp(p,'状态'),
+      account:  getProp(p,'目标账号'),
+      ctype:    getProp(p,'内容类型'),
+      event:    getProp(p,'事件类型主线'),
+      suspense: getProp(p,'核心悬念'),
+      outline:  getProp(p,'前三集概要'),
+      episodes: getProp(p,'计划集数'),
+      pace:     getProp(p,'节奏'),
+      url:      p.url || getProp(p,'url')
     };
   }));
 });
