@@ -186,6 +186,11 @@
   .send-note{font-size:12px;color:var(--muted);line-height:1.55;margin-top:12px}
   /* 灵感卡 AI 分析展示 */
   .key-insight{margin:12px 0 4px}
+  .watch-btn{display:block;text-align:center;margin-top:14px;font-family:inherit;
+    font-size:14px;font-weight:600;text-decoration:none;padding:11px 18px;
+    border-radius:12px;background:var(--orchid);color:#fff;transition:.18s}
+  .watch-btn:hover{background:var(--orchid-deep);transform:translateY(-1px)}
+  .an-comp{margin-bottom:10px}
   .comp-badge{display:inline-block;font-size:12px;font-weight:600;
     padding:4px 12px;border-radius:100px;margin-bottom:8px}
   .comp-badge.c-green{background:#E4F5EC;color:#1E8A5A}
@@ -546,35 +551,31 @@ function renderInsp(){
     const src=esc(d.source||'');
     const url=d.url||d.link||'';
     const embed=igEmbed(url);
-    // 常驻决策信息：合规状态 + MAE版本概念
+    // 所有 AI 分析信息（含合规、MAE概念）都收进折叠区，默认不显示
     const comp=complianceBadge(d.compliance);
     const mae=esc(d.maeConcept||'');
-    // 折叠的完整分析
-    const hasAnalysis=d.eventType||d.elements||d.aiSummary||d.series||d.maeConcept;
+    const hasAnalysis=d.eventType||d.elements||d.aiSummary||d.series||d.maeConcept||d.compliance;
     let analysis='';
     if(hasAnalysis){
       analysis='<div class="ai-analysis" id="an'+i+'" style="display:none">'+
+        (comp?'<div class="an-comp">'+comp+'</div>':'')+
+        (mae?'<div class="mae-concept"><span class="mc-label">MAE 版本概念</span>'+mae+'</div>':'')+
         anRow('事件类型',d.eventType)+
         anRow('内容格式',d.format)+
         anRow('爆款元素',d.elements)+
         anRow('AI 拆解摘要',d.aiSummary)+
-        anRow('MAE 版本概念',d.maeConcept)+
         anRow('系列判断',d.series)+
       '</div>'+
-      '<button class="an-toggle" onclick="toggleAn('+i+')" id="ant'+i+'">▾ 展开完整分析</button>';
+      '<button class="an-toggle" onclick="toggleAn('+i+')" id="ant'+i+'">▾ 展开分析</button>';
     }
     return '<div class="card"><div class="hook-tags"><span class="tag">'+tag+'</span>'+
       (acct?'<span class="tag tag-acct">'+acct+'</span>':'')+
-      (src?'<span class="tag">'+src+'</span>':'')+'</div>'+
+      (src?'<span class="tag">'+src+'</span>':'')+
+      (d.identity?'<span class="tag">'+esc(d.identity)+'</span>':'')+'</div>'+
       '<h3>'+title+'</h3>'+
       embed+
-      (comp||mae?'<div class="key-insight">'+comp+
-        (mae?'<div class="mae-concept"><span class="mc-label">MAE 版本概念</span>'+mae+'</div>':'')+
-        '</div>':'')+
+      (url?'<a class="watch-btn" href="'+esc(url)+'" target="_blank">▶ 看原片</a>':'')+
       analysis+
-      '<div class="meta">'+(d.identity?'<span>'+esc(d.identity)+'</span>':'')+
-      (url?'<a class="open" href="'+esc(url)+'" target="_blank">看原片 ▶</a>':'')+
-      '</div>'+
       '</div>';
   }).join('')+'</div>';
   if(window.instgrm && window.instgrm.Embeds){window.instgrm.Embeds.process();}
@@ -601,7 +602,7 @@ window.toggleAn=function(i){
   var btn=document.getElementById('ant'+i);
   if(!el)return;
   if(el.style.display==='none'){el.style.display='block';btn.textContent='▴ 收起分析';}
-  else{el.style.display='none';btn.textContent='▾ 展开完整分析';}
+  else{el.style.display='none';btn.textContent='▾ 展开分析';}
 };
 
 // build an Instagram embed block for a reel/post url; empty string if not IG
