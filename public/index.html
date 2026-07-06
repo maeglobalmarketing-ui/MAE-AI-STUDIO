@@ -208,6 +208,22 @@
     border-radius:11px;background:var(--orchid);color:#fff;transition:.18s}
   .notion-add:hover{background:var(--orchid-deep);transform:translateY(-1px)}
   .notion-add-note{font-size:12.5px;color:var(--muted)}
+  /* AI 生成钩子盒子 */
+  .gen-box{background:linear-gradient(135deg,var(--lilac),#F6F1FB);
+    border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:18px}
+  .gen-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+  .gen-title{font-family:'Fraunces',serif;font-weight:500;font-size:17px;color:var(--ink);margin-bottom:3px}
+  .gen-sub{font-size:13px;color:var(--muted);line-height:1.5;max-width:56ch}
+  .gen-toggle{flex-shrink:0;font-family:inherit;font-size:13px;font-weight:600;
+    cursor:pointer;padding:7px 15px;border-radius:100px;
+    border:1px solid rgba(115,80,185,.25);background:rgba(255,255,255,.7);color:var(--orchid)}
+  .gen-toggle:hover{background:#fff}
+  .gen-body{margin-top:15px}
+  .gen-input{width:100%;font-family:inherit;font-size:14px;padding:12px 14px;
+    border-radius:11px;border:1px solid var(--line);background:#fff;box-sizing:border-box}
+  .gen-input:focus{outline:none;border-color:var(--orchid)}
+  .gen-btns{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
+  .gen-note{font-size:12px;color:var(--muted);line-height:1.55;margin-top:11px}
   /* 提案库卡片 */
   .prop-card{display:block;text-decoration:none;color:inherit;cursor:pointer}
   .prop-card:hover{border-color:var(--orchid);transform:translateY(-2px)}
@@ -457,6 +473,25 @@
 
   <!-- 钩子库 -->
   <section class="view" id="v-hooks">
+    <div class="gen-box">
+      <div class="gen-head">
+        <div>
+          <div class="gen-title">✨ 用 AI 生成钩子</div>
+          <div class="gen-sub">输入主题 → 送到你的 AI 生成一批钩子 → 挑好的填进钩子库（按固定格式输出，照抄即可）</div>
+        </div>
+        <button class="gen-toggle" onclick="toggleGen()" id="genToggle">展开 ▾</button>
+      </div>
+      <div class="gen-body" id="genBody" style="display:none">
+        <input class="gen-input" id="genInput" placeholder="输入主题或场景，例如：一位妈妈重新学画画的故事" />
+        <div class="gen-btns">
+          <button class="send-btn primary" onclick="genHookCopy()" id="genCopyBtn">📋 复制 Prompt</button>
+          <button class="send-btn" onclick="genHookTo('chatgpt')">ChatGPT</button>
+          <button class="send-btn" onclick="genHookTo('claude')">Claude</button>
+          <button class="send-btn" onclick="genHookTo('gemini')">Gemini</button>
+        </div>
+        <p class="gen-note">生成后，把每行「钩子 ｜ 类型 ｜ 账号 ｜ 身份」照抄进钩子库即可。ChatGPT 通常自动带入；Claude / Gemini 跳转后粘贴（已自动复制）。</p>
+      </div>
+    </div>
     <div class="notion-add-bar">
       <a class="notion-add" href="https://www.notion.so/f9f9b501cb1342e5a079b0a0c43ae46d" target="_blank">+ 在 Notion 添加钩子</a>
       <span class="notion-add-note">添加在 Notion，几秒后刷新 Dashboard 就会出现</span>
@@ -1021,6 +1056,46 @@ function renderFunnel(){
   '<div class="funnel-note"><b>这是信任漏斗，不是卖货漏斗。</b>'+
   ' TOFU 让她看见，MOFU 让她相信，BOFU 让她行动——内容的使命是建立信任，不是催单。</div>';
 }
+
+// ---------- 钩子库 AI 生成器（送去各家 AI，固定格式输出） ----------
+window.toggleGen=function(){
+  var b=document.getElementById('genBody');
+  var btn=document.getElementById('genToggle');
+  if(!b)return;
+  if(b.style.display==='none'){b.style.display='block';btn.textContent='收起 ▴';}
+  else{b.style.display='none';btn.textContent='展开 ▾';}
+};
+function buildHookPrompt(){
+  var input=(document.getElementById('genInput')||{}).value||'';
+  input=input.trim();
+  if(!input) return '';
+  return MAE_CONTEXT+
+    '【任务】为以下主题生成 8 个高共鸣的开场钩子（前 3 秒抓住观众）。\n'+
+    '【输出格式】每个钩子严格用一行，用「｜」分隔四栏，方便直接填进钩子库，不要多余文字：\n'+
+    '钩子内容 ｜ 类型 ｜ 适用账号 ｜ 适用身份\n'+
+    '- 类型从这些选：悬念 / 反差 / 数字 / 提问 / 痛点 / 金句 / 动作 / 争议\n'+
+    '- 适用账号从这些选：CEO IP / 品牌流量 / 通用\n'+
+    '- 适用身份从这些选：重启者 / 撑场者 / 掌舵者 / 和解者 / 觉醒者\n\n'+
+    '【主题】'+input;
+}
+window.genHookCopy=function(){
+  var p=buildHookPrompt();
+  var btn=document.getElementById('genCopyBtn');
+  if(!p){btn.textContent='请先输入主题';setTimeout(function(){btn.textContent='📋 复制 Prompt';},1600);return;}
+  navigator.clipboard.writeText(p).then(function(){
+    btn.textContent='✓ 已复制';setTimeout(function(){btn.textContent='📋 复制 Prompt';},1600);
+  }).catch(function(){});
+};
+window.genHookTo=function(ai){
+  var p=buildHookPrompt();
+  if(!p){var gi=document.getElementById('genInput');if(gi){gi.focus();gi.placeholder='请先输入主题再点生成 ✦';}return;}
+  if(navigator.clipboard) navigator.clipboard.writeText(p).catch(function(){});
+  var url;
+  if(ai==='chatgpt') url='https://chatgpt.com/?q='+encodeURIComponent(p);
+  else if(ai==='claude') url='https://claude.ai/new';
+  else if(ai==='gemini') url='https://gemini.google.com/app';
+  window.open(url,'_blank');
+};
 
 // ---------- boot ----------
 loadInsp();loadHooks();loadBench();loadProposals();renderIdentities();renderAccounts();renderFunnel();
