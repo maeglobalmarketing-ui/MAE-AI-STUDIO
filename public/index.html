@@ -208,6 +208,9 @@
     font-size:14px;font-weight:600;text-decoration:none;padding:10px 20px;
     border-radius:11px;background:var(--orchid);color:#fff;transition:.18s}
   .notion-add:hover{background:var(--orchid-deep);transform:translateY(-1px)}
+  .notion-add.ghost{background:var(--white);color:var(--orchid);
+    border:1px solid var(--line)}
+  .notion-add.ghost:hover{background:var(--lilac);border-color:var(--orchid)}
   .notion-add-note{font-size:12.5px;color:var(--muted)}
   /* AI 生成钩子盒子 */
   .gen-box{background:linear-gradient(135deg,var(--lilac),#F6F1FB);
@@ -510,6 +513,7 @@
   <section class="view" id="v-proposals">
     <div class="notion-add-bar">
       <a class="notion-add" href="https://www.notion.so/6daf5f25048b41c2be54297d75b7c584" target="_blank">+ 在 Notion 添加提案</a>
+      <a class="notion-add ghost" href="https://www.notion.so/395bdfff2af08142ae23c669dc58ed89" target="_blank">📖 怎么提案 · 模板</a>
       <span class="notion-add-note">点任意提案卡可跳去 Notion 修改；添加后刷新即可看到</span>
     </div>
     <div id="propBody"><div class="loading"><div class="spinner"></div>正在读取系列提案库…</div></div>
