@@ -47,6 +47,9 @@ function getProp(page, name) {
   if (p.type === 'url') return p.url || '';
   if (p.type === 'number') return p.number;
   if (p.type === 'status') return p.status ? p.status.name : '';
+  if (p.type === 'people') return (p.people || []).map(function(u){return u.name || '';}).filter(Boolean).join(', ');
+  if (p.type === 'created_time') return (p.created_time || '').slice(0,10);
+  if (p.type === 'date') return p.date ? p.date.start : '';
   if (p.type === 'unique_id') return p.unique_id ? (p.unique_id.prefix || '') + '-' + p.unique_id.number : '';
   return '';
 }
@@ -121,6 +124,8 @@ app.get('/api/proposals', async function(req, res) {
       line:     getProp(p,'归属线'),
       ptype:    getProp(p,'系列类型'),
       owner:    getProp(p,'负责人'),
+      proposer: getProp(p,'提案人'),
+      created:  getProp(p,'创建日期') || (p.created_time||'').slice(0,10),
       audience: getProp(p,'目标人群'),
       keymsg:   getProp(p,'KeyMessage'),
       url:      p.url || getProp(p,'url')
