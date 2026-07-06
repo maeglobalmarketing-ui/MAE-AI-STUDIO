@@ -239,6 +239,12 @@
   .prop-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
     margin-top:14px;padding-top:12px;border-top:1px solid var(--line);
     font-size:12px;color:var(--muted)}
+  .prop-section{margin-bottom:34px}
+  .prop-sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:4px}
+  .prop-sec-title{font-family:'Fraunces',serif;font-weight:500;font-size:21px;
+    color:var(--ink)}
+  .prop-sec-count{font-size:13px;color:var(--muted)}
+  .prop-sec-sub{font-size:13px;color:var(--muted);margin-bottom:16px}
   /* 快捷指令安装横幅 */
   .sc-banner{background:linear-gradient(135deg,var(--lilac),#F6F1FB);
     border:1px solid var(--line);border-radius:16px;padding:20px 22px;
@@ -871,43 +877,59 @@ function propStatusClass(s){
   if(s.indexOf('批准')>=0) return 'ps-ok';
   return 'ps-todo';
 }
+function propCard(d){
+  const name=esc(d.name||'未命名系列');
+  const status=esc(d.status||'1提案中');
+  const line=esc(d.line||'');
+  const ptype=esc(d.ptype||'');
+  const owner=esc(d.owner||'');
+  const proposer=esc(d.proposer||'');
+  const created=esc(d.created||'');
+  const audience=esc(d.audience||'');
+  const keymsg=esc(d.keymsg||'');
+  const url=d.url||'';
+  const inner=
+    '<div class="prop-top">'+
+      '<span class="prop-status '+propStatusClass(d.status)+'">'+status+'</span>'+
+    '</div>'+
+    '<h3 style="margin-top:10px">'+name+'</h3>'+
+    '<div class="hook-tags" style="margin-top:8px">'+
+      (ptype?'<span class="tag">'+ptype+'</span>':'')+
+      (owner?'<span class="tag">👤 负责 '+owner+'</span>':'')+
+    '</div>'+
+    (keymsg?'<p style="margin-top:12px"><b>Key Message：</b>'+keymsg+'</p>':'')+
+    (audience?'<p style="margin-top:8px;color:var(--muted)"><b>目标人群：</b>'+audience+'</p>':'')+
+    '<div class="prop-foot">'+
+      (proposer?'<span>提案人：'+proposer+'</span>':'')+
+      (created?'<span>'+created+'</span>':'')+
+    '</div>'+
+    (url?'<span class="prop-edit">在 Notion 打开修改 →</span>':'');
+  return url
+    ? '<a class="card prop-card" href="'+esc(url)+'" target="_blank">'+inner+'</a>'
+    : '<div class="card">'+inner+'</div>';
+}
+function propSection(title, sub, items){
+  if(!items.length) return '';
+  return '<div class="prop-section">'+
+    '<div class="prop-sec-head"><span class="prop-sec-title">'+title+'</span>'+
+    '<span class="prop-sec-count">'+items.length+' 个系列</span></div>'+
+    (sub?'<div class="prop-sec-sub">'+sub+'</div>':'')+
+    '<div class="grid">'+items.map(propCard).join('')+'</div></div>';
+}
 async function loadProposals(){
   const data=await getJSON('/api/proposals');
   const body=document.getElementById('propBody');
   if(data.length)setConn(true);
   if(!data.length){body.innerHTML=emptyState('还没有提案。点上方「+ 在 Notion 添加提案」创建第一个系列。');return;}
-  body.innerHTML='<div class="grid">'+data.map(d=>{
-    const name=esc(d.name||'未命名系列');
-    const status=esc(d.status||'1提案中');
-    const line=esc(d.line||'');
-    const ptype=esc(d.ptype||'');
-    const owner=esc(d.owner||'');
-    const proposer=esc(d.proposer||'');
-    const created=esc(d.created||'');
-    const audience=esc(d.audience||'');
-    const keymsg=esc(d.keymsg||'');
-    const url=d.url||'';
-    const inner=
-      '<div class="prop-top">'+
-        '<span class="prop-status '+propStatusClass(d.status)+'">'+status+'</span>'+
-        (line?'<span class="tag tag-acct">'+line+'</span>':'')+
-      '</div>'+
-      '<h3 style="margin-top:10px">'+name+'</h3>'+
-      '<div class="hook-tags" style="margin-top:8px">'+
-        (ptype?'<span class="tag">'+ptype+'</span>':'')+
-        (owner?'<span class="tag">👤 负责 '+owner+'</span>':'')+
-      '</div>'+
-      (keymsg?'<p style="margin-top:12px"><b>Key Message：</b>'+keymsg+'</p>':'')+
-      (audience?'<p style="margin-top:8px;color:var(--muted)"><b>目标人群：</b>'+audience+'</p>':'')+
-      '<div class="prop-foot">'+
-        (proposer?'<span>提案人：'+proposer+'</span>':'')+
-        (created?'<span>'+created+'</span>':'')+
-      '</div>'+
-      (url?'<span class="prop-edit">在 Notion 打开修改 →</span>':'');
-    return url
-      ? '<a class="card prop-card" href="'+esc(url)+'" target="_blank">'+inner+'</a>'
-      : '<div class="card">'+inner+'</div>';
-  }).join('')+'</div>';
+  // 排除模板行（系列名含"模板"），再按归属线分两区
+  const real=data.filter(d=>!/模板/.test(d.name||''));
+  const ceo=real.filter(d=>/CEO/i.test(d.line||''));
+  const mae=real.filter(d=>/MAE/i.test(d.line||''));
+  const other=real.filter(d=>!/CEO/i.test(d.line||'')&&!/MAE/i.test(d.line||''));
+  body.innerHTML=
+    propSection('👑 CEO IP','@kateysy · Kate 个人 IP 线（负责人 Eunice）',ceo)+
+    propSection('✨ MAE IP','@maeglobalofficial · 品牌号线（负责人 Sky）',mae)+
+    (other.length?propSection('📋 未分线',' ',other):'');
 }
 const toolMeta={
   hook:{title:'钩子生成',hint:'输入主题或场景，生成内置 MAE 规则的钩子 prompt，送到你惯用的 AI。',ph:'例如：一位妈妈重新开始学画画的故事…'},
