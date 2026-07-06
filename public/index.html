@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <script async src="https://www.instagram.com/embed.js"></script>
+<script async src="https://www.tiktok.com/embed.js"></script>
 <style>
   :root{
     --lavender:#C3B5EB;
@@ -604,6 +605,9 @@ tabBtns.forEach(b=>b.onclick=()=>{
   if(b.dataset.v==='insp' && window.instgrm && window.instgrm.Embeds){
     window.instgrm.Embeds.process();
   }
+  if(b.dataset.v==='insp' && window.tiktokEmbed && window.tiktokEmbed.lib){
+    try{window.tiktokEmbed.lib.render(document.querySelectorAll('.tiktok-embed'));}catch(e){}
+  }
 });
 
 // ---------- safe fetch ----------
@@ -714,11 +718,12 @@ function renderInsp(){
       (d.identity?'<span class="tag">'+esc(d.identity)+'</span>':'')+'</div>'+
       '<h3>'+title+'</h3>'+
       embed+
-      (url?'<a class="watch-btn" href="'+esc(url)+'" target="_blank">▶ 看原片</a>':'')+
+      (url?'<a class="watch-btn" href="'+esc(url)+'" target="_blank">▶ 看原片'+(platformName(url)?'（'+platformName(url)+'）':'')+'</a>':'')+
       analysis+
       '</div>';
   }).join('')+'</div>';
   if(window.instgrm && window.instgrm.Embeds){window.instgrm.Embeds.process();}
+  if(window.tiktokEmbed && window.tiktokEmbed.lib){try{window.tiktokEmbed.lib.render(document.querySelectorAll('.tiktok-embed'));}catch(e){}}
 }
 
 // 合规状态徽章（红/黄/绿灯）
@@ -757,12 +762,32 @@ window.toggleAn=function(i){
 // build an Instagram embed block for a reel/post url; empty string if not IG
 function igEmbed(url){
   if(!url) return '';
+  // Instagram
   var m=url.match(/instagram\.com\/(reel|p|tv)\/([A-Za-z0-9_-]+)/);
-  if(!m) return '';
-  var clean='https://www.instagram.com/'+m[1]+'/'+m[2]+'/';
-  return '<blockquote class="instagram-media" data-instgrm-permalink="'+clean+'" '+
-    'data-instgrm-version="14" style="margin:14px 0 4px;min-width:0;width:100%">'+
-    '</blockquote>';
+  if(m){
+    var clean='https://www.instagram.com/'+m[1]+'/'+m[2]+'/';
+    return '<blockquote class="instagram-media" data-instgrm-permalink="'+clean+'" '+
+      'data-instgrm-version="14" style="margin:14px 0 4px;min-width:0;width:100%">'+
+      '</blockquote>';
+  }
+  // TikTok
+  var t=url.match(/tiktok\.com\/.*\/video\/(\d+)/) || url.match(/tiktok\.com\/.*[?&]item_id=(\d+)/);
+  if(t){
+    return '<blockquote class="tiktok-embed" cite="'+esc(url)+'" data-video-id="'+t[1]+'" '+
+      'style="margin:14px 0 4px;min-width:0;width:100%;max-width:100%"><section></section></blockquote>';
+  }
+  // 其他平台（小红书/FB/YouTube等）不内嵌，靠「看原片」按钮打开
+  return '';
+}
+// 平台名识别（给「看原片」按钮更贴切的文字）
+function platformName(url){
+  if(!url) return '';
+  if(/xiaohongshu\.com|xhslink\.com/.test(url)) return '小红书';
+  if(/facebook\.com|fb\.watch/.test(url)) return 'Facebook';
+  if(/youtube\.com|youtu\.be/.test(url)) return 'YouTube';
+  if(/tiktok\.com/.test(url)) return 'TikTok';
+  if(/instagram\.com/.test(url)) return 'Instagram';
+  return '';
 }
 
 // ---------- 钩子库 ----------
